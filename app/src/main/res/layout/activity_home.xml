@@ -11,15 +11,21 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/profileImage"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="centerCrop"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:shape="oval"
+            android:src="@drawable/ic_launcher_foreground"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:contentDescription="Profile Image"/>
