@@ -1,35 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Primer ítem del menú (Personas) -->
     <item
-        android:id="@+id/nav_personas"
+        android:id="@+id/nav_groups"
         android:icon="@drawable/ic_personas"
         
         android:title="Personas"/>
 
-    <!-- Segundo ítem del menú (Añadir Persona) -->
     <item
         android:id="@+id/nav_add_person"
         android:icon="@drawable/ic_add_person"
         android:title="Añadir Persona"/>
 
-    <!-- Tercer ítem del menú (Home) -->
     <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_home"
         android:title="Home"/>
 
-    <!-- Cuarto ítem del menú (Notificaciones) -->
     <item
         android:id="@+id/nav_notifications"
         android:icon="@drawable/ic_notifications"
         android:title="Notificaciones"/>
 
-    <!-- Quinto ítem del menú (Ajustes) -->
     <item
-        android:id="@+id/nav_settings"
+        android:id="@+id/nav_payment"
         android:icon="@drawable/ic_payments"
-        android:title="Ajustes"/>
+        android:title="Pagos"/>
 
 </menu>
