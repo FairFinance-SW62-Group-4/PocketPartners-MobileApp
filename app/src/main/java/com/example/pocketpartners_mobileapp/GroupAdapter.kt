@@ -30,16 +30,13 @@ class GroupAdapter(private val grupos: List<Grupo>) : RecyclerView.Adapter<Group
     override fun onBindViewHolder(holder: GrupoViewHolder, position: Int) {
         val grupo = grupos[position]
 
-        // Asignamos el nombre del grupo
         holder.tvGroupName.text = grupo.name
 
-        // Asignamos una imagen al grupo (puedes usar Glide o Picasso para cargar imágenes desde URLs)
         Glide.with(holder.itemView.context)
-            .load(grupo.groupPhoto)  // La URL de la imagen
-            .placeholder(R.drawable.ic_launcher_foreground)  // Imagen predeterminada mientras carga
+            .load(grupo.groupPhoto)
+            .placeholder(R.drawable.ic_launcher_foreground)
             .into(holder.ivGroupImage)
 
-        // Alternamos los colores de fondo
         val colorIndex = position % colores.size
         holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, colores[colorIndex]))
     }
