@@ -3,6 +3,7 @@ package com.example.pocketpartners_mobileapp
 import Beans.Grupo
 import Interface.PlaceHolder
 import android.os.Bundle
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -37,7 +38,6 @@ class Groups : AppCompatActivity() {
 
         service = retrofit.create<PlaceHolder>(PlaceHolder::class.java)
         getGroups()
-
     }
 
     private fun getGroups(){

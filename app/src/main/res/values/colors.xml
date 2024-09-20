@@ -4,4 +4,5 @@
     <color name="colorAmarillo">#FFC107</color>
     <color name="colorBlanco">#FFFFFF</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="navigation_bar_color">#FF8601</color>
 </resources>
