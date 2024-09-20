@@ -37,7 +37,7 @@ class GroupsFragment : Fragment() {
 
         // Inicializar Retrofit
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
