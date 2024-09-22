@@ -1,11 +1,11 @@
 package com.example.pocketpartners_mobileapp
 
-import Beans.Friend
+import Beans.UsersInformation
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class FriendAdapter(val friendsList:List<Friend>):RecyclerView.Adapter<FriendsViewholder>() {
+class FriendAdapter(val friendsList:List<UsersInformation>):RecyclerView.Adapter<FriendsViewholder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendsViewholder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return FriendsViewholder(layoutInflater.inflate(R.layout.friends_card, parent, false))

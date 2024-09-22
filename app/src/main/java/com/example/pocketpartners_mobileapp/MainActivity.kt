@@ -31,11 +31,6 @@ class MainActivity : AppCompatActivity() {
             loadFragment(getFragmentById(selectedFragmentId))
         }
 
-        bottomNavigationView.setOnItemSelectedListener { item ->
-            selectedFragmentId = item.itemId // Guardar el ID seleccionado
-            loadFragment(getFragmentById(selectedFragmentId))
-            true
-        }
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             var selectedFragment: Fragment? = null
@@ -68,21 +63,5 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_groups -> GroupsFragment()
             else -> HomeFragment() // Siempre devuelve HomeFragment si no es groups
         }
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        if (fragmentManager.backStackEntryCount > 0) {
-            fragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        }
-
-        fragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("selectedFragmentId", selectedFragmentId) // Guardar el ID del fragmento seleccionado
     }
 }

@@ -1,6 +1,6 @@
 package com.example.pocketpartners_mobileapp
 
-import Beans.Friend
+import Beans.UsersInformation
 import Interface.FriendsPlaceHolder
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -72,15 +72,15 @@ class AddFriendsFragment : Fragment() {
     }
 
     private fun getUsers(view: View){
-        service.getListadoFriends().enqueue(object : Callback<List<Friend>>{
-            override fun onResponse(call: Call<List<Friend>>, response: Response<List<Friend>>) {
+        service.getListadoFriends().enqueue(object : Callback<List<UsersInformation>>{
+            override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
                 val u = response.body()
-                val listaU = mutableListOf<Friend>()
+                val listaU = mutableListOf<UsersInformation>()
 
                 if(u != null){
                     for (item in u){
                         listaU.add(
-                            Friend(item.id, item.fullName, item.phoneNumber,
+                            UsersInformation(item.id, item.fullName, item.phoneNumber,
                                 item.photo ,item.email, item.userId)
                         )
                     }
@@ -91,7 +91,7 @@ class AddFriendsFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(p0: Call<List<Friend>>, p1: Throwable) {
+            override fun onFailure(p0: Call<List<UsersInformation>>, p1: Throwable) {
                 p1.printStackTrace()
             }
         })

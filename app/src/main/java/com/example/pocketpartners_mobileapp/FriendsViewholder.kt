@@ -1,6 +1,6 @@
 package com.example.pocketpartners_mobileapp
 
-import Beans.Friend
+import Beans.UsersInformation
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -12,7 +12,7 @@ class FriendsViewholder(view: View):RecyclerView.ViewHolder(view) {
     var friendAdress = view.findViewById<TextView>(R.id.txtFriendAdress)
     var friendImg = view.findViewById<ImageView>(R.id.imgFriend)
 
-    fun render(friendModel:Friend){
+    fun render(friendModel:UsersInformation){
         friendName.text = friendModel.fullName
         friendAdress.text = friendModel.email
         Picasso.get().load(friendModel.photo)
