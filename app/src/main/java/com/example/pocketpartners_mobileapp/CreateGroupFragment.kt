@@ -33,7 +33,19 @@ class CreateGroupFragment : Fragment() {
         }
 
         btnNext.setOnClickListener(){
+            val groupName = txtNom.text.toString()
+            val groupPhoto = "URL de la foto" // Puedes modificar esto para obtener la URL de la foto
+            val currency = txtMon.text.toString().split(",") // Supón que la moneda se ingresa como "PEN,USD"
+
+            // Crear el bundle para pasar los datos al siguiente fragmento
+            val bundle = Bundle().apply {
+                putString("groupName", groupName)
+                putString("groupPhoto", groupPhoto)
+                putStringArray("currency", currency.toTypedArray())
+            }
+
             val fragment = AddParticipantFragment()
+            fragment.arguments = bundle
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, fragment)
             transaction.addToBackStack(null)

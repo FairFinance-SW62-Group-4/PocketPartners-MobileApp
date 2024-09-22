@@ -62,66 +62,15 @@
 
             <!-- Lista de participantes -->
             <!-- Puedes repetir este bloque para cada participante -->
-            <LinearLayout
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRecomendados"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="center_vertical">
+                android:layout_marginBottom="24dp"
+                android:layout_gravity="center" />
 
-                <!-- Nombre del participante -->
-                <TextView
-                    android:id="@+id/tv_participante1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Fernando"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/black"/>
-
-                <!-- Botón de añadir participante -->
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_add"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:contentDescription="Añadir participante"/>
-            </LinearLayout>
-
-            <!-- Línea divisoria -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/black"/>
-
-            <!-- Repetir para cada participante -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="center_vertical">
-
-                <TextView
-                    android:id="@+id/tv_participante2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="María"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/black"/>
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_add"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:contentDescription="Añadir participante"/>
-            </LinearLayout>
-
-            <!-- Agrega más líneas y participantes aquí de la misma manera -->
         </LinearLayout>
 
         <Button
