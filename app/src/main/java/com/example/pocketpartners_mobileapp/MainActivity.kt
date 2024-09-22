@@ -36,6 +36,31 @@ class MainActivity : AppCompatActivity() {
             loadFragment(getFragmentById(selectedFragmentId))
             true
         }
+
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            var selectedFragment: Fragment? = null
+            when (item.itemId) {
+                R.id.nav_home -> selectedFragment = HomeFragment()
+                R.id.nav_groups -> selectedFragment = GroupsFragment()
+                R.id.nav_add_person -> selectedFragment = FriendsFragment()
+            }
+
+            if (selectedFragment != null) {
+                loadFragment(selectedFragment)
+            }
+            true
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        if (fragmentManager.backStackEntryCount > 0) {
+            fragmentManager.popBackStack(null, androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
+        fragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 
     private fun getFragmentById(itemId: Int): Fragment {
