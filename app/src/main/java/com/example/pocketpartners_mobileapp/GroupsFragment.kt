@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pocketpartners_mobileapp.CreateGroupFragment
 import com.example.pocketpartners_mobileapp.GroupAdapter
 import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
@@ -28,6 +30,8 @@ class GroupsFragment : Fragment() {
         // Inflar el layout para este fragmento
         val view = inflater.inflate(R.layout.fragment_groups, container, false)
 
+        val btnCrearGrupo=view.findViewById<Button>(R.id.btnCreateGroup)
+
         // Configurar window insets si es necesario (esto aplica principalmente para temas que usen transparencia y manejo de "Edge to Edge")
         ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -37,11 +41,19 @@ class GroupsFragment : Fragment() {
 
         // Inicializar Retrofit
         val retrofit = Retrofit.Builder()
-            .baseUrl("") // Asegúrate de poner la URL base correcta
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         service = retrofit.create(PlaceHolder::class.java)
+
+        btnCrearGrupo.setOnClickListener {
+            val fragment = CreateGroupFragment()
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
 
         // Llamar a la función para obtener los grupos
         getGroups(view)
