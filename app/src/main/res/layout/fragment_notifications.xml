@@ -55,78 +55,82 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="#FFC107"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
+                    android:padding="8dp" <!-- Padding añadido aquí -->
+                app:cardBackgroundColor="#FFC107"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="José creó un nuevo gasto en Fútbol"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:padding="16dp"
-                        android:gravity="center_horizontal"/>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="#FFC107"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
+                    android:text="José creó un nuevo gasto en Fútbol"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:padding="16dp"
+                    android:gravity="center_horizontal"/>
+            </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="María creó un nuevo gasto en Familia"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:padding="16dp"
-                        android:gravity="center_horizontal"/>
-                </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:padding="8dp" <!-- Padding añadido aquí -->
+            app:cardBackgroundColor="#FFC107"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="#FFC107"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="María creó un nuevo gasto en Familia"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:padding="16dp"
+                android:gravity="center_horizontal"/>
+        </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Gonzalo envió un pago por Amigos"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:padding="16dp"
-                        android:gravity="center_horizontal"/>
-                </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:padding="8dp" <!-- Padding añadido aquí -->
+        app:cardBackgroundColor="#FFC107"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="#FFC107"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="4dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gonzalo envió un pago por Amigos"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:padding="16dp"
+            android:gravity="center_horizontal"/>
+    </androidx.cardview.widget.CardView>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Gloria envió un pago por Noche de Juegos"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        android:padding="16dp"
-                        android:gravity="center_horizontal"/>
-                </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp"
+        app:cardBackgroundColor="#FFC107"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-            </LinearLayout>
-
-        </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gloria envió un pago por Noche de Juegos"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:gravity="center_horizontal"/>
+</androidx.cardview.widget.CardView>
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
