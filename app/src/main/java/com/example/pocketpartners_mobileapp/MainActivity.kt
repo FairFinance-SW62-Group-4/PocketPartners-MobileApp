@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView.selectedItemId = R.id.nav_home
         } else {
             selectedFragmentId = savedInstanceState.getInt("selectedFragmentId", R.id.nav_home)
-            bottomNavigationView.selectedItemId = selectedFragmentId 
+            bottomNavigationView.selectedItemId = selectedFragmentId
             loadFragment(getFragmentById(selectedFragmentId))
         }
 
@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_groups -> selectedFragment = GroupsFragment()
                 R.id.nav_add_person -> selectedFragment = FriendsFragment()
                 R.id.nav_notifications -> selectedFragment = NotificationsFragment()
+                R.id.nav_payment -> selectedFragment = MissingPaymentsFragment()
             }
 
             if (selectedFragment != null) {
