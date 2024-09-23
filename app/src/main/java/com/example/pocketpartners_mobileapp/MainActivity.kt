@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> selectedFragment = HomeFragment()
                 R.id.nav_groups -> selectedFragment = GroupsFragment()
                 R.id.nav_add_person -> selectedFragment = FriendsFragment()
+                R.id.nav_payment -> selectedFragment = MissingPaymentsFragment()
             }
 
             if (selectedFragment != null) {
