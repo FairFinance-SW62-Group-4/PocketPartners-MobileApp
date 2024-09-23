@@ -31,13 +31,13 @@ class MainActivity : AppCompatActivity() {
             loadFragment(getFragmentById(selectedFragmentId))
         }
 
-
         bottomNavigationView.setOnItemSelectedListener { item ->
             var selectedFragment: Fragment? = null
             when (item.itemId) {
                 R.id.nav_home -> selectedFragment = HomeFragment()
                 R.id.nav_groups -> selectedFragment = GroupsFragment()
                 R.id.nav_add_person -> selectedFragment = FriendsFragment()
+                R.id.nav_notifications -> selectedFragment = NotificationsFragment() // Nueva línea para NotificationsFragment
             }
 
             if (selectedFragment != null) {
@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
     private fun getFragmentById(itemId: Int): Fragment {
         return when (itemId) {
             R.id.nav_groups -> GroupsFragment()
+            R.id.nav_notifications -> NotificationsFragment() // Añadido aquí
             else -> HomeFragment() // Siempre devuelve HomeFragment si no es groups
         }
     }
