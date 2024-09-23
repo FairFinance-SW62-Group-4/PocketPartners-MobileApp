@@ -13,124 +13,40 @@
         android:padding="16dp"
         android:background="@android:color/white">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            android:background="@android:color/white">
-
-            <ImageView
-                android:id="@+id/profile_image"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/ic_launcher_foreground"
-                android:scaleType="centerCrop"
-                android:layout_alignParentStart="true"
-                android:layout_marginEnd="8dp" />
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Notificaciones"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:layout_toEndOf="@id/profile_image"
-                android:layout_centerVertical="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="8dp"
-                android:layout_alignParentEnd="true"
-                android:gravity="center"/>
-
-            <LinearLayout
-                android:id="@+id/notification_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_below="@id/title"
-                android:layout_marginTop="16dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:padding="8dp" <!-- Padding añadido aquí -->
-                app:cardBackgroundColor="#FFC107"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="José creó un nuevo gasto en Fútbol"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold"
-                    android:padding="16dp"
-                    android:gravity="center_horizontal"/>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:padding="8dp" <!-- Padding añadido aquí -->
-            app:cardBackgroundColor="#FFC107"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="4dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="María creó un nuevo gasto en Familia"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:padding="16dp"
-                android:gravity="center_horizontal"/>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:padding="8dp" <!-- Padding añadido aquí -->
-        app:cardBackgroundColor="#FFC107"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
+        <ImageView
+            android:id="@+id/profile_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_launcher_foreground"
+            android:scaleType="centerCrop"
+            android:layout_gravity="start"
+            android:layout_marginBottom="8dp"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gonzalo envió un pago por Amigos"
-            android:textColor="@android:color/black"
+            android:text="Notificaciones"
+            android:textSize="24sp"
             android:textStyle="bold"
-            android:padding="16dp"
-            android:gravity="center_horizontal"/>
-    </androidx.cardview.widget.CardView>
+            android:textColor="@android:color/black"
+            android:layout_gravity="start"/>
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:padding="8dp"
-        app:cardBackgroundColor="#FFC107"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+        <LinearLayout
+            android:id="@+id/notification_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Gloria envió un pago por Noche de Juegos"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:padding="16dp"
-        android:gravity="center_horizontal"/>
-</androidx.cardview.widget.CardView>
-
+        <Button
+            android:id="@+id/btn_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar Notificación"
+            android:layout_gravity="end"
+            android:background="@drawable/btn_notification"
+            android:padding="16dp"/>
     </LinearLayout>
-
-    </RelativeLayout>
-
-    </LinearLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
