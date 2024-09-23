@@ -24,10 +24,10 @@ class MainActivity : AppCompatActivity() {
         // Cargar siempre el HomeFragment
         if (savedInstanceState == null) {
             loadFragment(HomeFragment())
-            bottomNavigationView.selectedItemId = R.id.nav_home // Asegurarse de que se muestre "Home"
+            bottomNavigationView.selectedItemId = R.id.nav_home
         } else {
             selectedFragmentId = savedInstanceState.getInt("selectedFragmentId", R.id.nav_home)
-            bottomNavigationView.selectedItemId = selectedFragmentId // Actualizar la selección en la barra
+            bottomNavigationView.selectedItemId = selectedFragmentId 
             loadFragment(getFragmentById(selectedFragmentId))
         }
 
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> selectedFragment = HomeFragment()
                 R.id.nav_groups -> selectedFragment = GroupsFragment()
                 R.id.nav_add_person -> selectedFragment = FriendsFragment()
-                R.id.nav_notifications -> selectedFragment = NotificationsFragment() // Nueva línea para NotificationsFragment
+                R.id.nav_notifications -> selectedFragment = NotificationsFragment()
             }
 
             if (selectedFragment != null) {
