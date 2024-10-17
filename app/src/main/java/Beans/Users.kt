@@ -19,3 +19,9 @@ data class FriendsList(
     val userId: Int,
     val friendsIds: List<Int>
 )
+
+data class AuthenticatedUserResource(
+    val id: Long,
+    val username: String,
+    val token: String
+)

@@ -22,19 +22,29 @@ class FriendsFragment : Fragment() {
     lateinit var service: FriendsPlaceHolder
 
     companion object {
-        fun newInstance() = FriendsFragment()
+        private const val USER_ID = "user_id"
+
+        fun newInstance(userId: Int): FriendsFragment {
+            val fragment = FriendsFragment()
+            val args = Bundle()
+            args.putInt(USER_ID, userId)
+            fragment.arguments = args
+            return fragment
+        }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private var userId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            userId = it.getInt(USER_ID, 0)
+        }
+
         val view = inflater.inflate(R.layout.fragment_friends, container, false)
         val btnAddFriend = view.findViewById<Button>(R.id.btnAddFriends)
 

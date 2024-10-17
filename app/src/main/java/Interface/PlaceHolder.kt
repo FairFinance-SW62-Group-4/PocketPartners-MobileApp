@@ -1,15 +1,20 @@
 package Interface
 
+import Beans.AuthenticatedUserResource
 import Beans.Expense
 import Beans.FriendsList
 import Beans.GroupRequest
 import Beans.GroupResponse
 import Beans.Grupo
 import Beans.Payment
+import Beans.SignInRequest
+import Beans.SignUpRequest
+import Beans.User
 import Beans.UsersInformation
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -36,4 +41,11 @@ interface PlaceHolder {
 
     @GET("api/v1/expenses/groupId/{groupId}")
     fun getExpensesByGroupId(@Path("groupId") groupId: Long): Call<List<Expense>>
+
+    @POST("authentication/sign-in")
+    fun signIn(@Body signInRequest: SignInRequest): Call<AuthenticatedUserResource>
+
+    @POST("authentication/sign-up")
+    fun signUp(@Body signUpRequest: SignUpRequest): Call<User>
+
 }

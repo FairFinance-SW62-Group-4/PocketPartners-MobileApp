@@ -16,6 +16,20 @@ import androidx.lifecycle.ViewModelProvider
 
 class NotificationsFragment : Fragment() {
 
+    companion object {
+        private const val USER_ID = "user_id"
+
+        fun newInstance(userId: Int): NotificationsFragment {
+            val fragment = NotificationsFragment()
+            val args = Bundle()
+            args.putInt(USER_ID, userId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    private var userId: Int = 0
+
     private lateinit var notificationList: LinearLayout
     private lateinit var viewModel: NotificationsViewModel
 
@@ -23,6 +37,12 @@ class NotificationsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            userId = it.getInt(USER_ID, 0)
+        }
+
         val view = inflater.inflate(R.layout.fragment_notifications, container, false)
 
         notificationList = view.findViewById(R.id.notification_list)

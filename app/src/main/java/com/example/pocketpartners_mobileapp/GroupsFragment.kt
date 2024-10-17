@@ -21,12 +21,32 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class GroupsFragment : Fragment() {
 
+    companion object {
+        private const val USER_ID = "user_id"
+
+        fun newInstance(userId: Int): GroupsFragment {
+            val fragment = GroupsFragment()
+            val args = Bundle()
+            args.putInt(USER_ID, userId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    private var userId: Int = 0
+
     lateinit var service: PlaceHolder
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            userId = it.getInt(USER_ID, 0)
+        }
+
         // Inflar el layout para este fragmento
         val view = inflater.inflate(R.layout.fragment_groups, container, false)
 
