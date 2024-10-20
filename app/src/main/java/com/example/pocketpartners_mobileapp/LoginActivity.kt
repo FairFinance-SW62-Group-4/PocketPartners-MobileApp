@@ -7,14 +7,19 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import okhttp3.*
-import org.json.JSONObject
-import java.io.IOException
+import Beans.SignInRequest
+import Beans.AuthenticatedUserResource
+import Interface.PlaceHolder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
-    private val client = OkHttpClient()
+    private lateinit var service: PlaceHolder
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +31,14 @@ class LoginActivity : AppCompatActivity() {
         val btnRegister = findViewById<Button>(R.id.btnRegister)
         val edtUsername = findViewById<EditText>(R.id.edtUsername)
         val edtPassword = findViewById<EditText>(R.id.edtPassword)
+
+        // Inicializar Retrofit
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://localhost:8080/api/v1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        service = retrofit.create(PlaceHolder::class.java)
 
         // Manejar inicio de sesión
         btnLogin.setOnClickListener {
@@ -44,58 +57,42 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
-
     }
 
-    // Método para iniciar sesión
+    // Método para iniciar sesión usando Retrofit
     private fun loginUser(username: String, password: String) {
-        val url = "https://tu-api.com/api/v1/authentication/sign-in"
+        val signInRequest = SignInRequest(username, password)
 
-        // Crear el cuerpo de la solicitud
-        val json = JSONObject()
-        json.put("username", username)
-        json.put("password", password)
-
-        val requestBody = RequestBody.create(
-            MediaType.parse("application/json; charset=utf-8"),
-            json.toString()
-        )
-
-        // Crear la solicitud HTTP POST
-        val request = Request.Builder()
-            .url(url)
-            .post(requestBody)
-            .build()
-
-        // Hacer la solicitud en segundo plano
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    Toast.makeText(this@LoginActivity, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onResponse(call: Call, response: Response) {
+        service.signIn(signInRequest).enqueue(object : Callback<AuthenticatedUserResource> {
+            override fun onResponse(
+                call: Call<AuthenticatedUserResource>,
+                response: Response<AuthenticatedUserResource>
+            ) {
                 if (response.isSuccessful) {
-                    val responseBody = response.body()?.string()
-                    val jsonResponse = JSONObject(responseBody ?: "")
-                    val token = jsonResponse.getString("token")
-                    val userId = jsonResponse.getInt("id")
+                    val authUser = response.body()
 
-                    // Guardar token y userId en SharedPreferences
-                    val editor = sharedPreferences.edit()
-                    editor.putString("auth_token", token)
-                    editor.putInt("user_id", userId)
-                    editor.apply()
+                    if (authUser != null) {
+                        // Guardar el token y el userId en SharedPreferences
+                        val editor = sharedPreferences.edit()
+                        editor.putString("auth_token", authUser.token)
+                        editor.putLong("user_id", authUser.id)
+                        editor.apply()
 
-                    // Redirigir a MainActivity
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                        // Redirigir a MainActivity
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
                 } else {
                     runOnUiThread {
                         Toast.makeText(this@LoginActivity, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
                     }
+                }
+            }
+
+            override fun onFailure(call: Call<AuthenticatedUserResource>, t: Throwable) {
+                runOnUiThread {
+                    Toast.makeText(this@LoginActivity, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
                 }
             }
         })
