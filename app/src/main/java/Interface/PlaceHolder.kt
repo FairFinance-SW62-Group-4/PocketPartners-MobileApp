@@ -10,6 +10,7 @@ import Beans.Payment
 import Beans.SignInRequest
 import Beans.SignUpRequest
 import Beans.User
+import Beans.UserInformationRequest
 import Beans.UsersInformation
 import retrofit2.Call
 import retrofit2.http.Body
@@ -19,20 +20,26 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface PlaceHolder {
-    @GET("groups")
+    @GET("api/v1/groups")
     fun getListadoGroups(): Call<List<Grupo>>
 
-    @GET("userFriendsList/userId/{userId}")
+    @GET("api/v1/userFriendsList/userId/{userId}")
     fun getFriendsList(@Path("userId") userId: Int): Call<FriendsList>
 
-    // Endpoint para obtener la información de todos los usuarios
-    @GET("usersInformation/userId/{userId}")
+    @GET("api/v1/usersInformation/userId/{userId}")
     fun getUserInformation(@Path("userId") userId: Int): Call<UsersInformation>
 
-    @POST("groups")
+    @POST("api/v1/usersInformation")
+    fun createUserInformation(
+        @Header("Authorization") authHeader: String,
+        @Body userInformationRequest: UserInformationRequest
+    ): Call<UsersInformation>
+
+
+    @POST("api/v1/groups")
     fun createGroup(@Body groupRequest: GroupRequest): Call<GroupResponse>
 
-    @POST("groups/{groupId}/members/{userId}")
+    @POST("api/v1/groups/{groupId}/members/{userId}")
     fun addMemberToGroup(@Path("groupId") groupId: Int, @Path("userId") userId: Int, @Body memberJson: Map<String, Any>): Call<Void>
 
 
@@ -42,10 +49,10 @@ interface PlaceHolder {
     @GET("api/v1/expenses/groupId/{groupId}")
     fun getExpensesByGroupId(@Path("groupId") groupId: Long): Call<List<Expense>>
 
-    @POST("authentication/sign-in")
+    @POST("api/v1/authentication/sign-in")
     fun signIn(@Body signInRequest: SignInRequest): Call<AuthenticatedUserResource>
 
-    @POST("authentication/sign-up")
+    @POST("api/v1/authentication/sign-up")
     fun signUp(@Body signUpRequest: SignUpRequest): Call<User>
 
 }

@@ -49,7 +49,7 @@ class FriendsFragment : Fragment() {
         val btnAddFriend = view.findViewById<Button>(R.id.btnAddFriends)
 
         val retrofit =Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/") //Añadir URL luego cuando se prenda
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/") //Añadir URL luego cuando se prenda
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

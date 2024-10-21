@@ -25,3 +25,23 @@ data class AuthenticatedUserResource(
     val username: String,
     val token: String
 )
+
+data class SignInRequest(
+    val username: String,
+    val password: String
+)
+
+data class SignUpRequest(
+    val username: String,
+    val password: String,
+    val roles: List<String>
+)
+
+data class UserInformationRequest(
+    val firstName: String,
+    val lastName: String,
+    val phoneNumber: String,
+    val photo: String,
+    val email: String,
+    val userId: Int
+)

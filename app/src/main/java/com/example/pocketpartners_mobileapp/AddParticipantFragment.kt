@@ -72,7 +72,7 @@ class AddParticipantFragment : Fragment() {
 
     private fun crearGrupo(groupName: String, groupPhoto: String, currency: List<String>) {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -105,7 +105,7 @@ class AddParticipantFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun agregarMiembrosAlGrupo() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -144,7 +144,7 @@ class AddParticipantFragment : Fragment() {
 
     private fun obtenerAmigosConInformacionCompleta(userId: Int) {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

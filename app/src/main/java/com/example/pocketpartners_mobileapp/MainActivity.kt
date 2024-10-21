@@ -65,8 +65,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        fragmentManager.beginTransaction()
+        supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
@@ -80,17 +79,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isUserAuthenticated(): Boolean {
-        val userId = sharedPreferences.getLong("user_id", 0).toInt()
-        return userId != 0
+        return sharedPreferences.getLong("user_id", 0).toInt() != 0
     }
 
     fun logout() {
-        // Limpiar las preferencias de usuario
         sharedPreferences.edit().clear().apply()
 
-        // Redirigir a la actividad de inicio de sesión
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
-        finish() // Opcional: finaliza MainActivity para evitar que el usuario regrese con el botón de atrás
+        finish()
     }
 }

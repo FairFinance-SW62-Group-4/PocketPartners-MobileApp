@@ -19,6 +19,32 @@
         android:hint="Password"
         android:inputType="textPassword"/>
 
+    <EditText
+        android:id="@+id/edtFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="First Name" />
+    <EditText
+        android:id="@+id/edtLastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Last Name" />
+    <EditText
+        android:id="@+id/edtPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Phone Number" />
+    <EditText
+        android:id="@+id/edtPhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Photo" />
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email" />
+
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="match_parent"
