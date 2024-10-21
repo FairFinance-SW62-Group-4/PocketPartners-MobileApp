@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Si está autenticado, obtener el ID del usuario
-        userId = sharedPreferences.getInt("user_id", 0)
+        userId = sharedPreferences.getLong("user_id", 0L).toInt()
 
         setContentView(R.layout.activity_main)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.navigation_bar_color)
@@ -80,7 +80,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isUserAuthenticated(): Boolean {
-        val userId = sharedPreferences.getInt("user_id", 0)
+        val userId = sharedPreferences.getLong("user_id", 0).toInt()
         return userId != 0
+    }
+
+    fun logout() {
+        // Limpiar las preferencias de usuario
+        sharedPreferences.edit().clear().apply()
+
+        // Redirigir a la actividad de inicio de sesión
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Opcional: finaliza MainActivity para evitar que el usuario regrese con el botón de atrás
     }
 }

@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Inicializar Retrofit
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://localhost:8080/api/v1/")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
