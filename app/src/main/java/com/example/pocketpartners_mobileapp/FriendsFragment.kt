@@ -1,7 +1,8 @@
 package com.example.pocketpartners_mobileapp
 
+import Beans.FriendsList
+import Beans.FriendsOfUser
 import Beans.UsersInformation
-import Interface.FriendsPlaceHolder
 import Interface.PlaceHolder
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -63,7 +64,7 @@ class FriendsFragment : Fragment() {
         service = retrofit.create(PlaceHolder::class.java)
 
         btnAddFriend.setOnClickListener{
-            val fragment = AddFriendsFragment()
+            val fragment = AddFriendsFragment.newInstance(userId)
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, fragment)
             transaction.addToBackStack(null)
@@ -77,19 +78,42 @@ class FriendsFragment : Fragment() {
 
     private fun getFriends(view: View){
         val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+        val friends = mutableListOf<Int>()
         Log.d("FriendsFragment", "Auth Header: $authHeader")
+        //OBTIENE LA LISTA DE AMIGOS DEL USUARIO
+        service.getFriends(authHeader, userId).enqueue(object : Callback<FriendsOfUser>{
+            override fun onResponse(call: Call<FriendsOfUser>, response: Response<FriendsOfUser>) {
+                val lf = response.body()
+                //Log.d("amigos", lf?.friendIds?.size.toString())
+                if(lf?.friendIds?.size != null){
+                    for(f in lf.friendIds){
+                        friends.add(f)
+                    }
+                }
+            }
 
+            override fun onFailure(p0: Call<FriendsOfUser>, p1: Throwable) {
+                p1.printStackTrace()
+            }
+        })
+
+        //OBTIENE A TODOS LOS USUARIOS Y COMPARA CON LA LISTA DE AMIGOS
         service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
             override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
                 val fr = response.body()
                 val listaF = mutableListOf<UsersInformation>()
 
+                //Log.d("amigosDefinitivo", friends.size.toString())
                 if(fr != null){
                     for (item in fr){
-                        listaF.add(
-                            UsersInformation(item.id, item.fullName, item.phoneNumber,
-                            item.photo ,item.email, item.userId)
-                        )
+
+                        if(item.id in friends){
+                            //Log.d("resultado",item.fullName.toString())
+                            listaF.add(
+                                UsersInformation(item.id, item.fullName, item.phoneNumber,
+                                    item.photo ,item.email, item.userId)
+                            )
+                        }
                     }
 
                     val recycler = view.findViewById<RecyclerView>(R.id.recyclerFriends)

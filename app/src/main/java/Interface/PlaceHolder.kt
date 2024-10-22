@@ -2,7 +2,9 @@ package Interface
 
 import Beans.AuthenticatedUserResource
 import Beans.Expense
+import Beans.FriendListRequest
 import Beans.FriendsList
+import Beans.FriendsOfUser
 import Beans.GroupJoin
 import Beans.GroupRequest
 import Beans.GroupResponse
@@ -26,7 +28,10 @@ interface PlaceHolder {
     fun getListadoGroups(): Call<List<Grupo>>
 
     @POST("api/v1/groups")
-    fun createGroup(@Body groupRequest: GroupRequest): Call<GroupResponse>
+    fun createGroup(
+        @Header("Authorization") authHeader: String,
+        @Body groupRequest: GroupRequest
+    ): Call<GroupResponse>
 
     @GET("api/v1/groups/{groupId}")
     fun getGruposPorUserId(
@@ -35,7 +40,11 @@ interface PlaceHolder {
     ): Call<Grupo>
 
     @POST("api/v1/groups/{groupId}/members/{userId}")
-    fun addMemberToGroup(@Path("groupId") groupId: Int, @Path("userId") userId: Int, @Body memberJson: Map<String, Any>): Call<Void>
+    fun addMemberToGroup(
+        @Header("Authorization") authHeader: String,
+        @Path("groupId") groupId: Int,
+        @Path("userId") userId: Int
+    ): Call<GroupJoin>
 
     @GET("api/v1/groups/members/{userId}")
     fun getGruposUnidosPorUserId(
@@ -44,8 +53,6 @@ interface PlaceHolder {
     ): Call<List<GroupJoin>>
 
     //USERS
-    @GET("api/v1/userFriendsList/userId/{userId}")
-    fun getFriendsList(@Path("userId") userId: Int): Call<FriendsList>
 
     @GET("api/v1/usersInformation/userId/{userId}")
     fun getUserInformation(
@@ -65,17 +72,30 @@ interface PlaceHolder {
     ): Call<UsersInformation>
 
     //USERS FRIEND LISTS
+
     @GET("api/v1/userFriendsList/userId/{userId}")
-    fun getUserListById(
+    fun getFriends(
         @Header("Authorization") authHeader: String,
         @Path("userId") userId: Int
-    ): Call<Int>
+    ): Call<FriendsOfUser>
+
+    @GET("api/v1/userFriendsList/userId/{userId}")
+    fun getUserFriendsListById(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<FriendsList>
 
     @POST("api/v1/userFriendsList/addFriend")
     fun addUserToFriendsList(
         @Header("Authorization") authHeader: String
-    ): Call<Int>
+    ): Call<FriendsList>
 
+    @POST("api/v1/userFriendsList")
+    fun createFriendsList(
+        @Header("Authorization") authHeader: String,
+        @Body friendListRequest: FriendListRequest
+    ): Call<FriendsList>
+    
     //PAYMENT
     @GET("api/v1/payments/userId/{userId}")
     fun getPaymentsByUserId(@Path("userId") userId: Long): Call<List<Payment>>
