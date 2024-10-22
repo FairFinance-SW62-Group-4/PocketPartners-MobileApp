@@ -5,5 +5,6 @@ data class Expense(
     val name: String,
     val amount: Double,
     val userId: Int,
-    val groupId: Long
+    val groupId: Long,
+    var groupName: String?=null
 )
