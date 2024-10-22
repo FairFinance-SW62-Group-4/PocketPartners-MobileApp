@@ -291,6 +291,7 @@ class AddParticipantFragment : Fragment() {
     }
 
     private fun regresarAGroupsFragment() {
-        parentFragmentManager.popBackStack() // Regresar al fragmento anterior
+        parentFragmentManager.popBackStack()// Regresar al fragmento anterior
+        parentFragmentManager.popBackStack()
     }
 }
