@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import Beans.UsersInformation
 import GroupsFragment
 import Interface.PlaceHolder
+import android.content.SharedPreferences
 import android.os.Build
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +33,7 @@ class AddParticipantFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var amigoAdapter: FriendRecommendationAdapter
     private val amigosConInfo = mutableListOf<UsersInformation>()
+    private lateinit var sharedPreferences: SharedPreferences
     private var groupId: Int = -1
 
     override fun onCreateView(
@@ -39,11 +42,13 @@ class AddParticipantFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add_participant, container, false)
 
+
         val groupName = arguments?.getString("groupName") ?: "Default Name"
         val groupPhoto = arguments?.getString("groupPhoto") ?: "Default Photo URL"
         val currency = arguments?.getStringArray("currency")?.toList() ?: listOf("PEN")
 
         // Inicializar el RecyclerView
+        sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
         recyclerView = view.findViewById(R.id.rvRecomendados)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
@@ -72,7 +77,7 @@ class AddParticipantFragment : Fragment() {
 
     private fun crearGrupo(groupName: String, groupPhoto: String, currency: List<String>) {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -105,7 +110,7 @@ class AddParticipantFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun agregarMiembrosAlGrupo() {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -144,11 +149,13 @@ class AddParticipantFragment : Fragment() {
 
     private fun obtenerAmigosConInformacionCompleta(userId: Int) {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val placeHolder = retrofit.create(PlaceHolder::class.java)
+
+        val authHeader = sharedPreferences.getString("auth_token", null) ?: return
 
         // 1. Obtener la lista de amigos de un usuario
         placeHolder.getFriendsList(userId).enqueue(object : Callback<FriendsList> {
@@ -157,7 +164,7 @@ class AddParticipantFragment : Fragment() {
                     val friendsList = response.body()?.friendsIds ?: emptyList()
                     // Realizar las llamadas individuales para obtener la información de cada amigo
                     for (friendId in friendsList) {
-                        placeHolder.getUserInformation(friendId).enqueue(object : Callback<UsersInformation> {
+                        placeHolder.getUserInformation(authHeader,friendId).enqueue(object : Callback<UsersInformation> {
                             override fun onResponse(call: Call<UsersInformation>, response: Response<UsersInformation>) {
                                 if (response.isSuccessful) {
                                     response.body()?.let { amigo ->
