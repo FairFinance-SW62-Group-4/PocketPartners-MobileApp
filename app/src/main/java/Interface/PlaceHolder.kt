@@ -26,7 +26,10 @@ interface PlaceHolder {
     fun getListadoGroups(): Call<List<Grupo>>
 
     @POST("api/v1/groups")
-    fun createGroup(@Body groupRequest: GroupRequest): Call<GroupResponse>
+    fun createGroup(
+        @Header("Authorization") authHeader: String,
+        @Body groupRequest: GroupRequest
+    ): Call<GroupResponse>
 
     @GET("api/v1/groups/{groupId}")
     fun getGruposPorUserId(
@@ -35,7 +38,11 @@ interface PlaceHolder {
     ): Call<Grupo>
 
     @POST("api/v1/groups/{groupId}/members/{userId}")
-    fun addMemberToGroup(@Path("groupId") groupId: Int, @Path("userId") userId: Int, @Body memberJson: Map<String, Any>): Call<Void>
+    fun addMemberToGroup(
+        @Header("Authorization") authHeader: String,
+        @Path("groupId") groupId: Int,
+        @Path("userId") userId: Int
+    ): Call<GroupJoin>
 
     @GET("api/v1/groups/members/{userId}")
     fun getGruposUnidosPorUserId(
