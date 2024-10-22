@@ -60,12 +60,29 @@ interface PlaceHolder {
         @Path("userId") userId: Int
     ): Call<UsersInformation>
 
+    @GET("api/v1/usersInformation")
+    fun getAllUsersInformation(
+        @Header("Authorization") authHeader: String,
+    ): Call<List<UsersInformation>>
+
     @POST("api/v1/usersInformation")
     fun createUserInformation(
         @Header("Authorization") authHeader: String,
         @Body userInformationRequest: UserInformationRequest
     ): Call<UsersInformation>
 
+    //USERS FRIEND LISTS
+    @GET("api/v1/userFriendsList/userId/{userId}")
+    fun getUserListById(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<Int>
+
+    @POST("api/v1/userFriendsList/addFriend")
+    fun addUserToFriendsList(
+        @Header("Authorization") authHeader: String
+    ): Call<Int>
+    
     //PAYMENT
     @GET("api/v1/payments/userId/{userId}")
     fun getPaymentsByUserId(@Path("userId") userId: Long): Call<List<Payment>>
