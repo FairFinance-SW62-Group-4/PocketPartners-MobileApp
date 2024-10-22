@@ -33,7 +33,7 @@ interface PlaceHolder {
     ): Call<GroupResponse>
 
     @GET("api/v1/groups/{groupId}")
-    fun getGruposPorUserId(
+    fun getGruposPorGroupId(
         @Header("Authorization") authHeader: String,
         @Path("groupId") groupId: Int
     ): Call<Grupo>
@@ -90,10 +90,25 @@ interface PlaceHolder {
     
     //PAYMENT
     @GET("api/v1/payments/userId/{userId}")
-    fun getPaymentsByUserId(@Path("userId") userId: Long): Call<List<Payment>>
+    fun getPaymentsByUserId(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<List<Payment>>
+
+    @GET("api/v1/payments")
+    fun getPayments(
+        @Header("Authorization") authHeader: String
+    ): Call<List<Payment>>
 
     @GET("api/v1/expenses/groupId/{groupId}")
     fun getExpensesByGroupId(@Path("groupId") groupId: Long): Call<List<Expense>>
+
+    @GET("api/v1/expenses/expenseId/{expenseId}")
+    fun getExpensesByExpenseId(
+        @Header("Authorization") authHeader: String,
+        @Path("expenseId") expenseId: Long
+    ): Call<List<Expense>>
+
 
     //AUTHENTICATION
     @POST("api/v1/authentication/sign-in")

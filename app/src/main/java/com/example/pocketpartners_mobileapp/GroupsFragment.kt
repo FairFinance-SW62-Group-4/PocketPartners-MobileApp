@@ -94,7 +94,7 @@ class GroupsFragment : Fragment() {
                 // Verifica que se hayan recibido datos
                 if (groupJoins != null) {
                     val groupDetailsCalls = groupJoins.map { groupJoin ->
-                        service.getGruposPorUserId(authHeader, groupJoin.groupId)
+                        service.getGruposPorGroupId(authHeader, groupJoin.groupId)
                     }
 
                     for (call in groupDetailsCalls) {
