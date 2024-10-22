@@ -2,12 +2,16 @@ package com.example.pocketpartners_mobileapp
 
 import Beans.UsersInformation
 import Interface.FriendsPlaceHolder
+import Interface.PlaceHolder
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -19,7 +23,8 @@ import retrofit2.create
 
 class FriendsFragment : Fragment() {
 
-    lateinit var service: FriendsPlaceHolder
+    lateinit var service: PlaceHolder
+    private lateinit var sharedPreferences: SharedPreferences
 
     companion object {
         private const val USER_ID = "user_id"
@@ -46,6 +51,8 @@ class FriendsFragment : Fragment() {
         }
 
         val view = inflater.inflate(R.layout.fragment_friends, container, false)
+        sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
+
         val btnAddFriend = view.findViewById<Button>(R.id.btnAddFriends)
 
         val retrofit =Retrofit.Builder()
@@ -53,7 +60,7 @@ class FriendsFragment : Fragment() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        service = retrofit.create(FriendsPlaceHolder::class.java)
+        service = retrofit.create(PlaceHolder::class.java)
 
         btnAddFriend.setOnClickListener{
             val fragment = AddFriendsFragment()
@@ -69,7 +76,10 @@ class FriendsFragment : Fragment() {
     }
 
     private fun getFriends(view: View){
-        service.getListadoFriends().enqueue(object : Callback<List<UsersInformation>>{
+        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+        Log.d("FriendsFragment", "Auth Header: $authHeader")
+
+        service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
             override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
                 val fr = response.body()
                 val listaF = mutableListOf<UsersInformation>()

@@ -15,8 +15,8 @@ class FriendsViewholder(view: View):RecyclerView.ViewHolder(view) {
     fun render(friendModel:UsersInformation){
         friendName.text = friendModel.fullName
         friendAdress.text = friendModel.email
-        Picasso.get().load(friendModel.photo)
+        /*Picasso.get().load(friendModel.photo)
             .resize(100,100)
-            .centerCrop().into(friendImg)
+            .centerCrop().into(friendImg)*/
     }
 }

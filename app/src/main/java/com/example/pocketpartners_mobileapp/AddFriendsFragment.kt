@@ -2,12 +2,16 @@ package com.example.pocketpartners_mobileapp
 
 import Beans.UsersInformation
 import Interface.FriendsPlaceHolder
+import Interface.PlaceHolder
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -29,7 +33,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class AddFriendsFragment : Fragment() {
 
-    lateinit var service: FriendsPlaceHolder
+    lateinit var service: PlaceHolder
+    private lateinit var sharedPreferences: SharedPreferences
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -49,6 +54,8 @@ class AddFriendsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_friends, container, false)
+        sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
+
         val btnAddFriend = view.findViewById<Button>(R.id.btnAddFriends)
 
         val retrofit = Retrofit.Builder()
@@ -56,7 +63,7 @@ class AddFriendsFragment : Fragment() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        service = retrofit.create(FriendsPlaceHolder::class.java)
+        service = retrofit.create(PlaceHolder::class.java)
 
         btnAddFriend.setOnClickListener{
             val fragment = FriendsFragment()
@@ -72,7 +79,10 @@ class AddFriendsFragment : Fragment() {
     }
 
     private fun getUsers(view: View){
-        service.getListadoFriends().enqueue(object : Callback<List<UsersInformation>>{
+        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+        Log.d("AddFriendsFragment", "Auth Header: $authHeader")
+
+        service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
             override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
                 val u = response.body()
                 val listaU = mutableListOf<UsersInformation>()
