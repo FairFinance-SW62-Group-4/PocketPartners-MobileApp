@@ -1,10 +1,14 @@
+import Beans.GroupJoin
 import Beans.Grupo
 import Interface.PlaceHolder
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
@@ -21,27 +25,42 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class GroupsFragment : Fragment() {
 
+    companion object {
+        private const val USER_ID = "user_id"
+
+        fun newInstance(userId: Int): GroupsFragment {
+            val fragment = GroupsFragment()
+            val args = Bundle()
+            args.putInt(USER_ID, userId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    private var userId: Int = 0
     lateinit var service: PlaceHolder
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            userId = it.getInt(USER_ID, 0)
+        }
+
         // Inflar el layout para este fragmento
         val view = inflater.inflate(R.layout.fragment_groups, container, false)
 
-        val btnCrearGrupo=view.findViewById<Button>(R.id.btnCreateGroup)
+        sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
 
-        // Configurar window insets si es necesario (esto aplica principalmente para temas que usen transparencia y manejo de "Edge to Edge")
-        ViewCompat.setOnApplyWindowInsetsListener(view.findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        val btnCrearGrupo = view.findViewById<Button>(R.id.btnCreateGroup)
 
         // Inicializar Retrofit
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -55,37 +74,66 @@ class GroupsFragment : Fragment() {
             transaction.commit()
         }
 
-        // Llamar a la función para obtener los grupos
-        getGroups(view)
+        // Llamar a la función para obtener los grupos unidos
+        getJoinedGroups(view)
 
         return view
     }
 
-    private fun getGroups(view: View) {
-        service.getListadoGroups().enqueue(object : Callback<List<Grupo>> {
-            override fun onResponse(call: Call<List<Grupo>>, response: Response<List<Grupo>>) {
-                val gr = response.body()
+    private fun getJoinedGroups(view: View) {
+        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+        Log.d("GroupsFragment", "Auth Header: $authHeader")
 
-                val listaG = mutableListOf<Grupo>()
+        service.getGruposUnidosPorUserId(authHeader, userId).enqueue(object : Callback<List<GroupJoin>> {
+            override fun onResponse(call: Call<List<GroupJoin>>, response: Response<List<GroupJoin>>) {
+                val groupJoins = response.body()
+                val listaGrupos = mutableListOf<Grupo>()
 
-                if (gr != null) {
-                    for (item in gr) {
-                        listaG.add(
-                            Grupo(
-                                item.id, item.name, item.currency, item.groupPhoto, item.createdAt, item.updatedAt
-                            )
-                        )
+                Log.d("GroupsFragment", "Response: $groupJoins")
+
+                // Verifica que se hayan recibido datos
+                if (groupJoins != null) {
+                    // Obtener detalles de cada grupo
+                    val groupDetailsCalls = groupJoins.map { groupJoin ->
+                        service.getGruposPorUserId(authHeader, groupJoin.groupId)
                     }
-                    // Configurar el RecyclerView
-                    val recycler = view.findViewById<RecyclerView>(R.id.recyclerGroups)
-                    recycler.layoutManager = LinearLayoutManager(requireContext())
-                    recycler.adapter = GroupAdapter(listaG)
+
+                    // Ejecutar todas las llamadas para obtener detalles de los grupos
+                    for (call in groupDetailsCalls) {
+                        call.enqueue(object : Callback<Grupo> {
+                            override fun onResponse(call: Call<Grupo>, response: Response<Grupo>) {
+                                val grupo = response.body()
+                                if (grupo != null) {
+                                    listaGrupos.add(grupo)
+
+                                    // Configurar el RecyclerView una vez que se han agregado todos los grupos
+                                    if (listaGrupos.size == groupDetailsCalls.size) {
+                                        setupRecyclerView(view, listaGrupos)
+                                    }
+                                }
+                            }
+
+                            override fun onFailure(call: Call<Grupo>, t: Throwable) {
+                                t.printStackTrace()
+                            }
+                        })
+                    }
+                } else {
+                    val errorMessage = "Código de error: ${response.code()}"
+                    Log.e("GroupsFragment", "No group joins found: $errorMessage")
                 }
             }
 
-            override fun onFailure(call: Call<List<Grupo>>, t: Throwable) {
+            override fun onFailure(call: Call<List<GroupJoin>>, t: Throwable) {
                 t.printStackTrace()
+                Log.e("GroupsFragment", "Error: ${t.message}")
             }
         })
+    }
+
+    private fun setupRecyclerView(view: View, grupos: List<Grupo>) {
+        val recycler = view.findViewById<RecyclerView>(R.id.recyclerGroups)
+        recycler.layoutManager = LinearLayoutManager(requireContext())
+        recycler.adapter = GroupAdapter(grupos)
     }
 }

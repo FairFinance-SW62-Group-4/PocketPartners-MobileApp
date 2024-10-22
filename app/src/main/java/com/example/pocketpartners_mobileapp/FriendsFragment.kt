@@ -2,12 +2,16 @@ package com.example.pocketpartners_mobileapp
 
 import Beans.UsersInformation
 import Interface.FriendsPlaceHolder
+import Interface.PlaceHolder
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
@@ -19,31 +23,44 @@ import retrofit2.create
 
 class FriendsFragment : Fragment() {
 
-    lateinit var service: FriendsPlaceHolder
+    lateinit var service: PlaceHolder
+    private lateinit var sharedPreferences: SharedPreferences
 
     companion object {
-        fun newInstance() = FriendsFragment()
+        private const val USER_ID = "user_id"
+
+        fun newInstance(userId: Int): FriendsFragment {
+            val fragment = FriendsFragment()
+            val args = Bundle()
+            args.putInt(USER_ID, userId)
+            fragment.arguments = args
+            return fragment
+        }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private var userId: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            userId = it.getInt(USER_ID, 0)
+        }
+
         val view = inflater.inflate(R.layout.fragment_friends, container, false)
+        sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
+
         val btnAddFriend = view.findViewById<Button>(R.id.btnAddFriends)
 
         val retrofit =Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/") //Añadir URL luego cuando se prenda
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/") //Añadir URL luego cuando se prenda
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        service = retrofit.create(FriendsPlaceHolder::class.java)
+        service = retrofit.create(PlaceHolder::class.java)
 
         btnAddFriend.setOnClickListener{
             val fragment = AddFriendsFragment()
@@ -59,7 +76,10 @@ class FriendsFragment : Fragment() {
     }
 
     private fun getFriends(view: View){
-        service.getListadoFriends().enqueue(object : Callback<List<UsersInformation>>{
+        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+        Log.d("FriendsFragment", "Auth Header: $authHeader")
+
+        service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
             override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
                 val fr = response.body()
                 val listaF = mutableListOf<UsersInformation>()
