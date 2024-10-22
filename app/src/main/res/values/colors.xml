@@ -5,4 +5,5 @@
     <color name="colorBlanco">#FFFFFF</color>
     <color name="white">#FFFFFFFF</color>
     <color name="navigation_bar_color">#FF8601</color>
+    <color name="colorMorado">#AA67F2</color>
 </resources>

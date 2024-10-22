@@ -11,44 +11,77 @@
         android:orientation="vertical"
         android:layout_marginBottom="8dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnCreateGroup"
+        app:layout_constraintBottom_toTopOf="@+id/btnNext"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/profileImage"
+            android:id="@+id/backButton"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="centerCrop"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:shape="oval"
-            android:src="@drawable/ic_launcher_foreground"
+            android:src="@drawable/ic_arrow_left"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="46dp"
             android:contentDescription="Profile Image"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Grupos"
+            android:text="Crear Grupo"
             android:textAlignment="center"
             android:textStyle="bold"
-            android:textSize="45dp" />
+            android:layout_gravity="center"
+            android:textSize="40dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <EditText
+            android:id="@+id/txtNombreGrupo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recyclerGroups"/>
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="17dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="Nombre del Grupo"/>
+
+        <EditText
+            android:id="@+id/txtMoneda"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:hint="Moneda"/>
+        <Button
+            android:id="@+id/subirFoto"
+            android:layout_width="match_parent"
+            android:backgroundTint="@color/colorAmarillo"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:drawableTop="@drawable/ic_image"
+            android:layout_marginLeft="90dp"
+            android:layout_marginRight="90dp"
+            android:layout_marginTop="20dp"
+            android:text="Subir Foto"
+            android:textSize="15dp"
+            android:textColor="@color/black"/>
+
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnCreateGroup"
-        android:backgroundTint="@color/colorMorado"
+        android:id="@+id/btnNext"
         android:background="@drawable/btn_redondeado"
+        android:backgroundTint="#AA67F2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Crear grupo"
+        android:text="Siguiente"
         android:textColor="@android:color/white"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="36dp"
