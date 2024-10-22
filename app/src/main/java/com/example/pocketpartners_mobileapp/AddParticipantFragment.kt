@@ -138,6 +138,7 @@ class AddParticipantFragment : Fragment() {
                         override fun onResponse(call: Call<GroupJoin>, response: Response<GroupJoin>) {
                             if (response.isSuccessful) {
                                 Toast.makeText(requireContext(), "Usuario agregado al grupo.", Toast.LENGTH_SHORT).show()
+                                regresarAGroupsFragment()
                             } else {
                                 // Manejar errores de la respuesta
                                 when (response.code()) {
@@ -213,7 +214,6 @@ class AddParticipantFragment : Fragment() {
                 override fun onResponse(call: Call<GroupJoin>, response: Response<GroupJoin>) {
                     if (response.isSuccessful) {
                         Toast.makeText(requireContext(), "Miembro agregado al grupo.", Toast.LENGTH_SHORT).show()
-                        regresarAGroupsFragment()
                     } else {
                         // Manejar errores de la respuesta
                         when (response.code()) {
