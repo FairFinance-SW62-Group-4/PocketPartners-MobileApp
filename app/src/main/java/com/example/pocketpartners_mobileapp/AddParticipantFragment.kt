@@ -244,7 +244,7 @@ class AddParticipantFragment : Fragment() {
         val authHeader = sharedPreferences.getString("auth_token", null) ?: return
 
         // 1. Obtener la lista de amigos de un usuario
-        placeHolder.getFriendsList(userId).enqueue(object : Callback<FriendsList> {
+        placeHolder.getUserFriendsListById(authHeader, userId).enqueue(object : Callback<FriendsList> {
             override fun onResponse(call: Call<FriendsList>, response: Response<FriendsList>) {
                 if (response.isSuccessful) {
                     val friendsList = response.body()?.friendsIds ?: emptyList()

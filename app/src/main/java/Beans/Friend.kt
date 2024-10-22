@@ -8,3 +8,7 @@ data class Friend (
     val email:String,
     val userId:Int
 )
+
+data class FriendListRequest(
+    val userId: Int
+)

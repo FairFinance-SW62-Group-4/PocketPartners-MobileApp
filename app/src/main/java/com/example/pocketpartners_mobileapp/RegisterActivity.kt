@@ -1,5 +1,7 @@
 package com.example.pocketpartners_mobileapp
 
+import Beans.FriendListRequest
+import Beans.FriendsList
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -80,12 +82,14 @@ class RegisterActivity : AppCompatActivity() {
                     authHelper.loginUser(username, password, this@RegisterActivity) { userId ->
                         // Crear UserInformation una vez que se haya iniciado sesión
                         val userInformationRequest = UserInformationRequest(fName, lName, pNumber, photo, email, userId.toInt())
+                        val createFriendsListRequest = FriendListRequest(response.body()!!.id)
 
                         // Obtener el token del SharedPreferences
                         val token = sharedPreferences.getString("auth_token", null)
 
                         if (token != null) {
                             createUserInformation(token, userInformationRequest)
+                            createFriendsList(token, createFriendsListRequest)
                         } else {
                             Toast.makeText(this@RegisterActivity, "Token no disponible", Toast.LENGTH_SHORT).show()
                         }
@@ -108,11 +112,6 @@ class RegisterActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     runOnUiThread {
                         Toast.makeText(this@RegisterActivity, "Información del usuario creada con éxito", Toast.LENGTH_SHORT).show()
-
-                        // Redirigir a LoginActivity solo después de crear UserInformation
-                        val intent = Intent(this@RegisterActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish() // Cierra la actividad después de crear UserInformation
                     }
                 } else {
                     // Verificar el código de error y el cuerpo del error
@@ -131,5 +130,36 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         })
+    }
+
+    private fun createFriendsList(token: String, friendListRequest: FriendListRequest){
+        service.createFriendsList("Bearer $token", friendListRequest).enqueue(object : Callback<FriendsList> {
+            override fun onResponse(call: Call<FriendsList>, response: Response<FriendsList>) {
+                if (response.isSuccessful) {
+                    runOnUiThread {
+                        Toast.makeText(this@RegisterActivity, "Lista de Amigos creada con éxito", Toast.LENGTH_SHORT).show()
+
+                        // Redirigir a LoginActivity solo después de crear UserInformation
+                        val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish() // Cierra la actividad después de crear UserInformation
+                    }
+                } else {
+                    // Verificar el código de error y el cuerpo del error
+                    val errorBody = response.errorBody()?.string()
+                    val errorMessage = "Código de error: ${response.code()}, Cuerpo del error: $errorBody"
+                    Log.e("FriendsList", "Error al crear UserFriendsList: $errorMessage")
+                    runOnUiThread {
+                        Toast.makeText(this@RegisterActivity, "Error al crear UserFriendsList: $errorMessage", Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+            override fun onFailure(p0: Call<FriendsList>, p1: Throwable) {
+                runOnUiThread {
+                    Toast.makeText(this@RegisterActivity, "Error al crear la lista de amigos del usuario", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
     }
 }

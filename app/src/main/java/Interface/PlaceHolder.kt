@@ -2,6 +2,7 @@ package Interface
 
 import Beans.AuthenticatedUserResource
 import Beans.Expense
+import Beans.FriendListRequest
 import Beans.FriendsList
 import Beans.GroupJoin
 import Beans.GroupRequest
@@ -51,8 +52,6 @@ interface PlaceHolder {
     ): Call<List<GroupJoin>>
 
     //USERS
-    @GET("api/v1/userFriendsList/userId/{userId}")
-    fun getFriendsList(@Path("userId") userId: Int): Call<FriendsList>
 
     @GET("api/v1/usersInformation/userId/{userId}")
     fun getUserInformation(
@@ -73,15 +72,21 @@ interface PlaceHolder {
 
     //USERS FRIEND LISTS
     @GET("api/v1/userFriendsList/userId/{userId}")
-    fun getUserListById(
+    fun getUserFriendsListById(
         @Header("Authorization") authHeader: String,
         @Path("userId") userId: Int
-    ): Call<Int>
+    ): Call<FriendsList>
 
     @POST("api/v1/userFriendsList/addFriend")
     fun addUserToFriendsList(
         @Header("Authorization") authHeader: String
-    ): Call<Int>
+    ): Call<FriendsList>
+
+    @POST("api/v1/userFriendsList")
+    fun createFriendsList(
+        @Header("Authorization") authHeader: String,
+        @Body friendListRequest: FriendListRequest
+    ): Call<FriendsList>
     
     //PAYMENT
     @GET("api/v1/payments/userId/{userId}")
