@@ -71,6 +71,13 @@ interface PlaceHolder {
     ): Call<UsersInformation>
 
     //USERS FRIEND LISTS
+
+    @GET("api/v1/userFriendsList/userId/{userId}")
+    fun getFriends(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<FriendsOfUser>
+    
     @GET("api/v1/userFriendsList/userId/{userId}")
     fun getUserFriendsListById(
         @Header("Authorization") authHeader: String,
