@@ -2,6 +2,7 @@ package Interface
 
 import Beans.AuthenticatedUserResource
 import Beans.Expense
+import Beans.ExpenseResponse
 import Beans.FriendListRequest
 import Beans.FriendsList
 import Beans.GroupJoin
@@ -33,7 +34,7 @@ interface PlaceHolder {
     ): Call<GroupResponse>
 
     @GET("api/v1/groups/{groupId}")
-    fun getGruposPorUserId(
+    fun getGruposPorGroupId(
         @Header("Authorization") authHeader: String,
         @Path("groupId") groupId: Int
     ): Call<Grupo>
@@ -96,6 +97,17 @@ interface PlaceHolder {
     ): Call<FriendsList>
     
     //PAYMENT
+    @GET("api/v1/payments/userId/{userId}")
+    fun getPaymentsByUserId(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<List<Payment>>
+
+    @GET("api/v1/payments")
+    fun getPayments(
+        @Header("Authorization") authHeader: String
+    ): Call<List<Payment>>
+
     @GET("api/v1/payments/userId/{userId}/status/PENDING")
     fun getPaymentsByUserId(
         @Header("Authorization") authHeader: String,
@@ -104,6 +116,13 @@ interface PlaceHolder {
     @GET("api/v1/expenses")
     fun getAllExpenses(
         @Header("Authorization") authHeader: String,): Call<List<Expense>>
+
+    @GET("api/v1/expenses/expenseId/{expenseId}")
+    fun getExpensesByExpenseId(
+        @Header("Authorization") authHeader: String,
+        @Path("expenseId") expenseId: Long
+    ): Call<ExpenseResponse>
+
 
     //AUTHENTICATION
     @POST("api/v1/authentication/sign-in")

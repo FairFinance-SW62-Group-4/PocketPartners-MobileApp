@@ -93,12 +93,10 @@ class GroupsFragment : Fragment() {
 
                 // Verifica que se hayan recibido datos
                 if (groupJoins != null) {
-                    // Obtener detalles de cada grupo
                     val groupDetailsCalls = groupJoins.map { groupJoin ->
-                        service.getGruposPorUserId(authHeader, groupJoin.groupId)
+                        service.getGruposPorGroupId(authHeader, groupJoin.groupId)
                     }
 
-                    // Ejecutar todas las llamadas para obtener detalles de los grupos
                     for (call in groupDetailsCalls) {
                         call.enqueue(object : Callback<Grupo> {
                             override fun onResponse(call: Call<Grupo>, response: Response<Grupo>) {
@@ -106,8 +104,8 @@ class GroupsFragment : Fragment() {
                                 if (grupo != null) {
                                     listaGrupos.add(grupo)
 
-                                    // Configurar el RecyclerView una vez que se han agregado todos los grupos
-                                    if (listaGrupos.size == groupDetailsCalls.size) {
+                                    // Solo configuramos el RecyclerView si el fragmento aún está adjunto
+                                    if (isAdded && listaGrupos.size == groupDetailsCalls.size) {
                                         setupRecyclerView(view, listaGrupos)
                                     }
                                 }
@@ -132,6 +130,7 @@ class GroupsFragment : Fragment() {
     }
 
     private fun setupRecyclerView(view: View, grupos: List<Grupo>) {
+        if (!isAdded) return  // Evitar la configuración si el fragmento no está adjunto a la actividad
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerGroups)
         recycler.layoutManager = LinearLayoutManager(requireContext())
         recycler.adapter = GroupAdapter(grupos)
