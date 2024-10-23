@@ -128,22 +128,14 @@ class AddFriendsFragment : Fragment() {
                         }
                     }
 
-                    // Verificamos si el fragmento sigue adjunto a la actividad y si la vista está disponible
-                    if (isAdded && view != null) {
-                        // Verificamos si el contexto no es null antes de usarlo
-                        val safeContext = context ?: return
-                        val recycler = view?.findViewById<RecyclerView>(R.id.recyclerAddFriends)
-                        recycler?.layoutManager = LinearLayoutManager(safeContext)
-                        recycler?.adapter = AddFriendsAdapter(listaU)
-                    } else {
-                        // El fragmento ya no está adjunto, no intentar modificar la UI
-                        Log.w("AddFriendsFragment", "Fragment no longer attached, skipping UI update.")
-                    }
+                    val recycler = view.findViewById<RecyclerView>(R.id.recyclerAddFriends)
+                    recycler.layoutManager = LinearLayoutManager(requireContext())
+                    recycler.adapter = AddFriendsAdapter(listaU, service, userId, authHeader)
                 }
             }
 
-            override fun onFailure(call: Call<List<UsersInformation>>, t: Throwable) {
-                t.printStackTrace()
+            override fun onFailure(p0: Call<List<UsersInformation>>, p1: Throwable) {
+                p1.printStackTrace()
             }
         })
     }
