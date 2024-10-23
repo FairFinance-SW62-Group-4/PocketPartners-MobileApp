@@ -3,6 +3,7 @@ package com.example.pocketpartners_mobileapp
 import Interface.PlaceHolder
 import Beans.Payment
 import Beans.Expense
+import Beans.ExpenseResponse
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -51,6 +52,7 @@ class HomeFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         tableLayoutResumen = view.findViewById(R.id.tableLayoutResumen)
+        Log.d("TableLayout", "TableLayout initialized: $tableLayoutResumen")
 
         val imgProfile = view.findViewById<ImageView>(R.id.profileImage)
 
@@ -80,7 +82,16 @@ class HomeFragment : Fragment() {
     }
 
     private fun getRecentPayments() {
-        val authHeader = "Bearer ${requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE).getString("auth_token", null)}"
+        val sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
+        val authToken = sharedPreferences.getString("auth_token", null)
+
+        if (authToken.isNullOrEmpty()) {
+            Log.e("Auth Error", "El token de autenticación es nulo o está vacío")
+            return
+        }
+
+        val authHeader = "Bearer $authToken"
+        Log.d("Auth Header", "AuthHeader: $authHeader")
 
         // Limpia las filas anteriores del TableLayout pero mantiene el encabezado
         val childCount = tableLayoutResumen.childCount
@@ -92,7 +103,7 @@ class HomeFragment : Fragment() {
             override fun onResponse(call: Call<List<Payment>>, response: Response<List<Payment>>) {
                 if (response.isSuccessful) {
                     Log.d("API Response", "Payments: ${response.body()}")
-                    val payments = response.body()?.take(5)  // Tomar solo los últimos 5 pagos
+                    val payments = response.body()?.take(5)
 
                     if (payments.isNullOrEmpty()) {
                         Log.d("API Response", "No payments found.")
@@ -100,25 +111,32 @@ class HomeFragment : Fragment() {
                     }
 
                     payments.forEach { payment ->
-                        // Obtener detalles del gasto relacionado con el pago
-                        service.getExpensesByExpenseId(authHeader, payment.expenseId).enqueue(object : Callback<List<Expense>> {
-                            override fun onResponse(call: Call<List<Expense>>, response: Response<List<Expense>>) {
+                        Log.d("Auth Header", "AuthHeader: $authHeader")
+                        service.getExpensesByExpenseId(authHeader, payment.expenseId).enqueue(object : Callback<ExpenseResponse> {
+                            override fun onResponse(call: Call<ExpenseResponse>, response: Response<ExpenseResponse>) {
                                 if (response.isSuccessful) {
-                                    val expense = response.body()?.firstOrNull()
+                                    val expense = response.body()
                                     if (expense != null) {
-                                        Log.d("TableRow", "Adding row: Expense: ${expense.name}, Amount: ${payment.amount}, Status: ${payment.status}")
+                                        Log.d("API Response", "Expense found: ${expense.name}")
                                         addPaymentRow(expense.name, payment.amount.toString(), payment.status)
+                                    } else {
+                                        Log.d("API Response", "No expense found for payment id: ${payment.expenseId}")
                                     }
+                                } else {
+                                    Log.e("Expense Error", "Expense response code: ${response.code()}")
                                 }
                             }
 
-                            override fun onFailure(call: Call<List<Expense>>, t: Throwable) {
+                            override fun onFailure(call: Call<ExpenseResponse>, t: Throwable) {
                                 t.printStackTrace()
                             }
                         })
                     }
                 } else {
-                    Log.d("API Response", "Response code: ${response.code()}")
+                    Log.e("Payments Error", "Response code: ${response.code()}")
+                    if (response.code() == 401) {
+                        Log.e("Auth Error", "Error 401: Autenticación fallida, token no válido o caducado")
+                    }
                 }
             }
 
@@ -149,6 +167,14 @@ class HomeFragment : Fragment() {
         row.addView(amountTextView)
         row.addView(statusTextView)
 
+        // Verificar si la fila tiene datos
+        Log.d("TableRow", "Row views: ${row.childCount}")
+
+        // Añadir la fila al tableLayoutResumen
         tableLayoutResumen.addView(row)
+        tableLayoutResumen.invalidate()
+
+        // Verificar si la tabla ha recibido la nueva fila
+        Log.d("TableRow", "Table now has ${tableLayoutResumen.childCount} rows")
     }
 }

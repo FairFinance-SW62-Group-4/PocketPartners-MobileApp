@@ -2,6 +2,7 @@ package Interface
 
 import Beans.AuthenticatedUserResource
 import Beans.Expense
+import Beans.ExpenseResponse
 import Beans.FriendListRequest
 import Beans.FriendsList
 import Beans.GroupJoin
@@ -107,7 +108,7 @@ interface PlaceHolder {
     fun getExpensesByExpenseId(
         @Header("Authorization") authHeader: String,
         @Path("expenseId") expenseId: Long
-    ): Call<List<Expense>>
+    ): Call<ExpenseResponse>
 
 
     //AUTHENTICATION

@@ -155,6 +155,7 @@
                     android:id="@+id/tableLayoutResumen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="visible"
                     android:stretchColumns="1">
 
                     <TableRow>
