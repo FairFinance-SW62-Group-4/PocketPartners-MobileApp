@@ -84,7 +84,7 @@ class PendingPaymentsFragment : Fragment() {
     private fun fetchPendingPayments() {
         val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
         val service = getRetrofitInstance().create(PlaceHolder::class.java)
-        val call = service.getPaymentsByUserId(authHeader, userId)
+        val call = service.getPaymentsByUserIdPending(authHeader, userId)
 
         call.enqueue(object : Callback<List<Payment>> {
             override fun onResponse(call: Call<List<Payment>>, response: Response<List<Payment>>) {

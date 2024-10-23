@@ -5,6 +5,7 @@ import Beans.Expense
 import Beans.ExpenseResponse
 import Beans.FriendListRequest
 import Beans.FriendsList
+import Beans.FriendsOfUser
 import Beans.GroupJoin
 import Beans.GroupRequest
 import Beans.GroupResponse
@@ -109,9 +110,10 @@ interface PlaceHolder {
     ): Call<List<Payment>>
 
     @GET("api/v1/payments/userId/{userId}/status/PENDING")
-    fun getPaymentsByUserId(
+    fun getPaymentsByUserIdPending(
         @Header("Authorization") authHeader: String,
-        @Path("userId") userId: Int): Call<List<Payment>>
+        @Path("userId") userId: Int
+    ): Call<List<Payment>>
 
     @GET("api/v1/expenses")
     fun getAllExpenses(
