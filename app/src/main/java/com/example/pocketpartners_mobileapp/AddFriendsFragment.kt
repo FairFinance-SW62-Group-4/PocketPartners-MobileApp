@@ -1,15 +1,21 @@
 package com.example.pocketpartners_mobileapp
 
+import Beans.FriendsOfUser
 import Beans.UsersInformation
 import Interface.FriendsPlaceHolder
+import Interface.PlaceHolder
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pocketpartners_mobileapp.FriendsFragment.Companion
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,17 +35,27 @@ private const val ARG_PARAM2 = "param2"
  */
 class AddFriendsFragment : Fragment() {
 
-    lateinit var service: FriendsPlaceHolder
+    lateinit var service: PlaceHolder
+    private lateinit var sharedPreferences: SharedPreferences
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    companion object {
+        private const val USER_ID = "user_id"
+
+        fun newInstance(userId: Int): AddFriendsFragment{
+            val fragment = AddFriendsFragment()
+            val args = Bundle()
+            args.putInt(USER_ID, userId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    private var userId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            userId = it.getInt(com.example.pocketpartners_mobileapp.AddFriendsFragment.USER_ID, 0)
         }
     }
 
@@ -49,17 +65,19 @@ class AddFriendsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_friends, container, false)
+        sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
+
         val btnAddFriend = view.findViewById<Button>(R.id.btnAddFriends)
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pocket-partners-backend-production.up.railway.app/api/v1/")
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        service = retrofit.create(FriendsPlaceHolder::class.java)
+        service = retrofit.create(PlaceHolder::class.java)
 
         btnAddFriend.setOnClickListener{
-            val fragment = FriendsFragment()
+            val fragment = FriendsFragment.newInstance(userId)
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, fragment)
             transaction.addToBackStack(null)
@@ -72,17 +90,42 @@ class AddFriendsFragment : Fragment() {
     }
 
     private fun getUsers(view: View){
-        service.getListadoFriends().enqueue(object : Callback<List<UsersInformation>>{
+        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+        val friends = mutableListOf<Int>()
+        Log.d("AddFriendsFragment", "Auth Header: $authHeader")
+
+        //OBTIENE LA LISTA DE AMIGOS DEL USUARIO
+        // (POR RAHORA SOLO UTILIZA AL USUARIO "a" DE CONTRASEÑA "a", CON ID "4")
+        service.getFriends(authHeader, userId).enqueue(object : Callback<FriendsOfUser>{
+            override fun onResponse(call: Call<FriendsOfUser>, response: Response<FriendsOfUser>) {
+                val lf = response.body()
+                //Log.d("amigos", lf?.friendIds?.size.toString())
+                if(lf?.friendIds?.size != null){
+                    for(f in lf.friendIds){
+                        friends.add(f)
+                    }
+                }
+            }
+
+            override fun onFailure(p0: Call<FriendsOfUser>, p1: Throwable) {
+                p1.printStackTrace()
+            }
+        })
+
+        service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
             override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
                 val u = response.body()
                 val listaU = mutableListOf<UsersInformation>()
 
                 if(u != null){
                     for (item in u){
-                        listaU.add(
-                            UsersInformation(item.id, item.fullName, item.phoneNumber,
-                                item.photo ,item.email, item.userId)
-                        )
+
+                        if(item.id !in friends && item.id != userId){
+                            listaU.add(
+                                UsersInformation(item.id, item.fullName, item.phoneNumber,
+                                    item.photo ,item.email, item.userId)
+                            )
+                        }
                     }
 
                     val recycler = view.findViewById<RecyclerView>(R.id.recyclerAddFriends)
@@ -95,25 +138,5 @@ class AddFriendsFragment : Fragment() {
                 p1.printStackTrace()
             }
         })
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddFriendsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddFriendsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

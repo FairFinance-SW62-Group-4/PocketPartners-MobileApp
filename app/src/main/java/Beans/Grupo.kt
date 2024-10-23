@@ -9,6 +9,12 @@ data class Grupo(
     val updatedAt: String
 )
 
+data class GroupJoin(
+    val groupId: Int,
+    val userId: Int,
+    val joinedAt: String
+)
+
 data class Moneda(
     val id: Int,
     val code: String
