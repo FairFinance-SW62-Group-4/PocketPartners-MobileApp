@@ -72,6 +72,13 @@ interface PlaceHolder {
     ): Call<UsersInformation>
 
     //USERS FRIEND LISTS
+
+    @GET("api/v1/userFriendsList/userId/{userId}")
+    fun getFriends(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<FriendsOfUser>
+    
     @GET("api/v1/userFriendsList/userId/{userId}")
     fun getUserFriendsListById(
         @Header("Authorization") authHeader: String,
@@ -101,8 +108,14 @@ interface PlaceHolder {
         @Header("Authorization") authHeader: String
     ): Call<List<Payment>>
 
-    @GET("api/v1/expenses/groupId/{groupId}")
-    fun getExpensesByGroupId(@Path("groupId") groupId: Long): Call<List<Expense>>
+    @GET("api/v1/payments/userId/{userId}/status/PENDING")
+    fun getPaymentsByUserId(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int): Call<List<Payment>>
+
+    @GET("api/v1/expenses")
+    fun getAllExpenses(
+        @Header("Authorization") authHeader: String,): Call<List<Expense>>
 
     @GET("api/v1/expenses/expenseId/{expenseId}")
     fun getExpensesByExpenseId(
