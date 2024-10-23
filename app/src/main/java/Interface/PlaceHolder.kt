@@ -1,5 +1,6 @@
 package Interface
 
+import Beans.AddFriend
 import Beans.AuthenticatedUserResource
 import Beans.Expense
 import Beans.ExpenseResponse
@@ -85,6 +86,12 @@ interface PlaceHolder {
         @Header("Authorization") authHeader: String,
         @Path("userId") userId: Int
     ): Call<FriendsList>
+
+    @POST("api/v1/userFriendsList/addFriend")
+    fun addFriends(
+        @Header("Authorization") authHeader: String,
+        @Body addFriend: AddFriend
+    ): Call<FriendsOfUser>
 
     @POST("api/v1/userFriendsList/addFriend")
     fun addUserToFriendsList(
