@@ -123,7 +123,7 @@ class FriendsFragment : Fragment() {
 
                         val recycler = view.findViewById<RecyclerView>(R.id.recyclerFriends)
                         recycler.layoutManager = LinearLayoutManager(safeContext)
-                        recycler.adapter = FriendAdapter(listaF)
+                        recycler.adapter = FriendAdapter(listaF, userId, service, authHeader)
                     } else {
                         // El fragmento ya no está adjunto, no modificar la UI
                         Log.w("FriendsFragment", "Fragment no longer attached, skipping UI update.")
