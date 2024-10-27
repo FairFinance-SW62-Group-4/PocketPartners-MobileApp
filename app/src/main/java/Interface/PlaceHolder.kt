@@ -14,6 +14,7 @@ import Beans.Grupo
 import Beans.Payment
 import Beans.SignInRequest
 import Beans.SignUpRequest
+import Beans.UpdatedFriendsList
 import Beans.User
 import Beans.UserInformationRequest
 import Beans.UsersInformation
@@ -22,6 +23,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface PlaceHolder {
@@ -98,6 +100,13 @@ interface PlaceHolder {
         @Header("Authorization") authHeader: String
     ): Call<FriendsList>
 
+    @PUT("api/v1/userFriendsList/userId/{userId}")
+    fun updateFriendList(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int,
+        @Body list:UpdatedFriendsList
+    ): Call<FriendsOfUser>
+    
     @POST("api/v1/userFriendsList")
     fun createFriendsList(
         @Header("Authorization") authHeader: String,
