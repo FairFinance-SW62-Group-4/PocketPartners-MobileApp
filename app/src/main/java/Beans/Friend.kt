@@ -23,3 +23,7 @@ data class AddFriend(
 data class FriendListRequest(
     val userId: Int
 )
+
+data class UpdatedFriendsList(
+    val friendIds: List<Int>
+)
