@@ -1,7 +1,9 @@
 package Interface
 
+import Beans.AddFriend
 import Beans.AuthenticatedUserResource
 import Beans.Expense
+import Beans.ExpenseResponse
 import Beans.FriendListRequest
 import Beans.FriendsList
 import Beans.FriendsOfUser
@@ -12,6 +14,7 @@ import Beans.Grupo
 import Beans.Payment
 import Beans.SignInRequest
 import Beans.SignUpRequest
+import Beans.UpdatedFriendsList
 import Beans.User
 import Beans.UserInformationRequest
 import Beans.UsersInformation
@@ -20,6 +23,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface PlaceHolder {
@@ -34,7 +38,7 @@ interface PlaceHolder {
     ): Call<GroupResponse>
 
     @GET("api/v1/groups/{groupId}")
-    fun getGruposPorUserId(
+    fun getGruposPorGroupId(
         @Header("Authorization") authHeader: String,
         @Path("groupId") groupId: Int
     ): Call<Grupo>
@@ -78,7 +82,7 @@ interface PlaceHolder {
         @Header("Authorization") authHeader: String,
         @Path("userId") userId: Int
     ): Call<FriendsOfUser>
-
+    
     @GET("api/v1/userFriendsList/userId/{userId}")
     fun getUserFriendsListById(
         @Header("Authorization") authHeader: String,
@@ -86,9 +90,22 @@ interface PlaceHolder {
     ): Call<FriendsList>
 
     @POST("api/v1/userFriendsList/addFriend")
+    fun addFriends(
+        @Header("Authorization") authHeader: String,
+        @Body addFriend: AddFriend
+    ): Call<FriendsOfUser>
+
+    @POST("api/v1/userFriendsList/addFriend")
     fun addUserToFriendsList(
         @Header("Authorization") authHeader: String
     ): Call<FriendsList>
+
+    @PUT("api/v1/userFriendsList/userId/{userId}")
+    fun updateFriendList(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int,
+        @Body list:UpdatedFriendsList
+    ): Call<FriendsOfUser>
 
     @POST("api/v1/userFriendsList")
     fun createFriendsList(
@@ -98,10 +115,32 @@ interface PlaceHolder {
     
     //PAYMENT
     @GET("api/v1/payments/userId/{userId}")
-    fun getPaymentsByUserId(@Path("userId") userId: Long): Call<List<Payment>>
+    fun getPaymentsByUserId(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<List<Payment>>
 
-    @GET("api/v1/expenses/groupId/{groupId}")
-    fun getExpensesByGroupId(@Path("groupId") groupId: Long): Call<List<Expense>>
+    @GET("api/v1/payments")
+    fun getPayments(
+        @Header("Authorization") authHeader: String
+    ): Call<List<Payment>>
+
+    @GET("api/v1/payments/userId/{userId}/status/PENDING")
+    fun getPaymentsByUserIdPending(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<List<Payment>>
+
+    @GET("api/v1/expenses")
+    fun getAllExpenses(
+        @Header("Authorization") authHeader: String,): Call<List<Expense>>
+
+    @GET("api/v1/expenses/expenseId/{expenseId}")
+    fun getExpensesByExpenseId(
+        @Header("Authorization") authHeader: String,
+        @Path("expenseId") expenseId: Long
+    ): Call<ExpenseResponse>
+
 
     //AUTHENTICATION
     @POST("api/v1/authentication/sign-in")

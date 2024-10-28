@@ -62,6 +62,9 @@ class NotificationsFragment : Fragment() {
     }
 
     private fun updateNotificationList(notifications: List<String>) {
+        // Verificar si el fragmento está adjunto antes de manipular la UI
+        if (!isAdded) return
+
         notificationList.removeAllViews()
         notifications.forEach { notificationText ->
             addNotification(notificationText)

@@ -15,6 +15,15 @@ data class FriendsOfUser(
     val friendIds: List<Int>
 )
 
+data class AddFriend(
+    val userId:Int, //EN VERDAD ES LA ID DE LA LISTA
+    val friendId:Int
+)
+
 data class FriendListRequest(
     val userId: Int
+)
+
+data class UpdatedFriendsList(
+    val friendIds: List<Int>
 )

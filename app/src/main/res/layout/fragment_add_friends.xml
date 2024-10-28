@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:layout_marginBottom="8dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddFriends"
+        app:layout_constraintBottom_toTopOf="@+id/btnSearchUserByName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -46,7 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Busca por usuario"/>
+                android:hint="Busca por usuario"
+                android:id="@+id/edit_searchUser"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -67,12 +68,12 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnAddFriends"
+        android:id="@+id/btnSearchUserByName"
         android:background="@drawable/btn_redondeado"
         android:backgroundTint="#AA67F2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Regresar"
+        android:text="Buscar"
         android:textColor="@android:color/white"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="36dp"

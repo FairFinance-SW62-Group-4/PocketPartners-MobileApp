@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_groups -> selectedFragment = GroupsFragment.newInstance(userId)
                 R.id.nav_add_person -> selectedFragment = FriendsFragment.newInstance(userId)
                 R.id.nav_notifications -> selectedFragment = NotificationsFragment.newInstance(userId)
-                R.id.nav_payment -> selectedFragment = MissingPaymentsFragment.newInstance(userId)
+                R.id.nav_payment -> selectedFragment = PendingPaymentsFragment.newInstance(userId)
             }
 
             if (selectedFragment != null) {
