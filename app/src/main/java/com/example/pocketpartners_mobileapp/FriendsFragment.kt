@@ -89,50 +89,50 @@ class FriendsFragment : Fragment() {
                     for(f in lf.friendIds){
                         friends.add(f)
                     }
+
+                    //OBTIENE A TODOS LOS USUARIOS Y COMPARA CON LA LISTA DE AMIGOS
+                    service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
+                        override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
+                            val fr = response.body()
+                            val listaF = mutableListOf<UsersInformation>()
+
+                            //Log.d("amigosDefinitivo", friends.size.toString())
+                            if(fr != null){
+                                for (item in fr){
+
+                                    if(item.id in friends){
+                                        //Log.d("resultado",item.fullName.toString())
+                                        listaF.add(
+                                            UsersInformation(item.id, item.fullName, item.phoneNumber,
+                                                item.photo ,item.email, item.userId)
+                                        )
+                                    }
+                                }
+
+                                // Verificamos si el fragmento sigue adjunto a la actividad
+                                if (isAdded && view != null) {
+                                    // Verificar si el contexto está disponible
+                                    val safeContext = context ?: return
+
+                                    val recycler = view.findViewById<RecyclerView>(R.id.recyclerFriends)
+                                    recycler.layoutManager = LinearLayoutManager(safeContext)
+                                    recycler.adapter = FriendAdapter(listaF, userId, service, authHeader)
+                                } else {
+                                    // El fragmento ya no está adjunto, no modificar la UI
+                                    Log.w("FriendsFragment", "Fragment no longer attached, skipping UI update.")
+                                }
+                            }
+                        }
+
+                        override fun onFailure(call: Call<List<UsersInformation>>, t: Throwable) {
+                            t.printStackTrace()
+                        }
+                    })
                 }
             }
 
             override fun onFailure(p0: Call<FriendsOfUser>, p1: Throwable) {
                 p1.printStackTrace()
-            }
-        })
-
-        //OBTIENE A TODOS LOS USUARIOS Y COMPARA CON LA LISTA DE AMIGOS
-        service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
-            override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
-                val fr = response.body()
-                val listaF = mutableListOf<UsersInformation>()
-
-                //Log.d("amigosDefinitivo", friends.size.toString())
-                if(fr != null){
-                    for (item in fr){
-
-                        if(item.id in friends){
-                            //Log.d("resultado",item.fullName.toString())
-                            listaF.add(
-                                UsersInformation(item.id, item.fullName, item.phoneNumber,
-                                    item.photo ,item.email, item.userId)
-                            )
-                        }
-                    }
-
-                    // Verificamos si el fragmento sigue adjunto a la actividad
-                    if (isAdded && view != null) {
-                        // Verificar si el contexto está disponible
-                        val safeContext = context ?: return
-
-                        val recycler = view.findViewById<RecyclerView>(R.id.recyclerFriends)
-                        recycler.layoutManager = LinearLayoutManager(safeContext)
-                        recycler.adapter = FriendAdapter(listaF, userId, service, authHeader)
-                    } else {
-                        // El fragmento ya no está adjunto, no modificar la UI
-                        Log.w("FriendsFragment", "Fragment no longer attached, skipping UI update.")
-                    }
-                }
-            }
-
-            override fun onFailure(call: Call<List<UsersInformation>>, t: Throwable) {
-                t.printStackTrace()
             }
         })
     }

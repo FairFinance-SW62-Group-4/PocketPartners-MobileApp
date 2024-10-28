@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,6 +38,7 @@ class AddFriendsFragment : Fragment() {
 
     lateinit var service: PlaceHolder
     private lateinit var sharedPreferences: SharedPreferences
+    lateinit var authHeader:String
 
     companion object {
         private const val USER_ID = "user_id"
@@ -67,7 +69,8 @@ class AddFriendsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_add_friends, container, false)
         sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
 
-        val btnAddFriend = view.findViewById<Button>(R.id.btnAddFriends)
+        val btnSearchUser = view.findViewById<Button>(R.id.btnSearchUserByName)
+        val searchTextEdit = view.findViewById<EditText>(R.id.edit_searchUser)
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
@@ -76,26 +79,27 @@ class AddFriendsFragment : Fragment() {
 
         service = retrofit.create(PlaceHolder::class.java)
 
-        btnAddFriend.setOnClickListener{
-            val fragment = FriendsFragment.newInstance(userId)
+        btnSearchUser.setOnClickListener{
+            getUsers(view, searchTextEdit.text.toString())
+
+            /*val fragment = FriendsFragment.newInstance(userId)
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, fragment)
             transaction.addToBackStack(null)
-            transaction.commit()
+            transaction.commit()*/
         }
 
-        getUsers(view)
+        getUsers(view, "")
 
         return view
     }
 
-    private fun getUsers(view: View){
-        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+    private fun getUsers(view: View, name: String){
+        authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
         val friends = mutableListOf<Int>()
         Log.d("AddFriendsFragment", "Auth Header: $authHeader")
 
         //OBTIENE LA LISTA DE AMIGOS DEL USUARIO
-        // (POR RAHORA SOLO UTILIZA AL USUARIO "a" DE CONTRASEÑA "a", CON ID "4")
         service.getFriends(authHeader, userId).enqueue(object : Callback<FriendsOfUser>{
             override fun onResponse(call: Call<FriendsOfUser>, response: Response<FriendsOfUser>) {
                 val lf = response.body()
@@ -105,38 +109,67 @@ class AddFriendsFragment : Fragment() {
                         friends.add(f)
                     }
                 }
+
+                //OBTIENE TODOS LOS USUARIOS
+                service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
+                    override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
+                        val u = response.body()
+                        val listaU = mutableListOf<UsersInformation>()
+
+                        if(u != null){
+                            for (item in u){
+                                //COMPARA SOLO LOS QUE NO SON AMIGOS DEL USUARIO O EL PROPIO USUSARIO
+                                if(item.id !in friends && item.id != userId){
+
+                                    //COMPARA LOS NOMBRES BUSCADOS
+                                    if(compareStrings(name,item.fullName)){
+                                        Log.d("Usuario se puede añadir", item.id.toString())
+                                        listaU.add(
+                                            UsersInformation(item.id, item.fullName, item.phoneNumber,
+                                                item.photo ,item.email, item.userId)
+                                        )
+                                    }
+                                }
+                            }
+
+                            val recycler = view.findViewById<RecyclerView>(R.id.recyclerAddFriends)
+                            recycler.layoutManager = LinearLayoutManager(requireContext())
+                            recycler.adapter = AddFriendsAdapter(listaU, service, userId, authHeader)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<List<UsersInformation>>, p1: Throwable) {
+                        p1.printStackTrace()
+                    }
+                })
             }
 
             override fun onFailure(p0: Call<FriendsOfUser>, p1: Throwable) {
                 p1.printStackTrace()
             }
         })
+    }
 
-        service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
-            override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
-                val u = response.body()
-                val listaU = mutableListOf<UsersInformation>()
+    private fun compareStrings(searched:String, name:String): Boolean{
 
-                if(u != null){
-                    for (item in u){
+        val n = searched.length
+        if(n == 0){
+            return true
+        }
 
-                        if(item.id !in friends && item.id != userId){
-                            listaU.add(
-                                UsersInformation(item.id, item.fullName, item.phoneNumber,
-                                    item.photo ,item.email, item.userId)
-                            )
-                        }
-                    }
-
-                    val recycler = view.findViewById<RecyclerView>(R.id.recyclerAddFriends)
-                    recycler.layoutManager = LinearLayoutManager(requireContext())
-                    recycler.adapter = AddFriendsAdapter(listaU, service, userId, authHeader)
-                }
+        if(n <= name.length){
+            var w = ""
+            var i = 0
+            while (i < n){
+                w += name[i]
+                i++
             }
 
-            override fun onFailure(p0: Call<List<UsersInformation>>, p1: Throwable) {
-                p1.printStackTrace()
+            //Log.d("Comparados", "${w} y ${searched}")
+            if(w.lowercase() == searched.lowercase()){
+                return true
             }
-        })
+        }
+        return false
     }
 }
