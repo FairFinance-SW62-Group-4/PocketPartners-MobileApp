@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import Beans.SignInRequest
 import Beans.AuthenticatedUserResource
 import Interface.PlaceHolder
+import android.widget.ImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +33,7 @@ class LoginActivity : AppCompatActivity() {
         val btnRegister = findViewById<Button>(R.id.btnRegister)
         val edtUsername = findViewById<EditText>(R.id.edtUsername)
         val edtPassword = findViewById<EditText>(R.id.edtPassword)
+        val backButton = findViewById<ImageView>(R.id.backButton)
 
         // Inicializar Retrofit
         val retrofit = Retrofit.Builder()
@@ -42,6 +44,12 @@ class LoginActivity : AppCompatActivity() {
         service = retrofit.create(PlaceHolder::class.java)
         authHelper = AuthHelper(service, sharedPreferences)
 
+        backButton.setOnClickListener {
+            // Crear un Intent para abrir MainMenu
+            val intent = Intent(this, MainMenu::class.java)
+            startActivity(intent)
+            finish() // Opcional: finaliza LoginActivity para evitar regresar con el botón "Atrás"
+        }
 
         // Manejar inicio de sesión
         btnLogin.setOnClickListener {
@@ -59,6 +67,7 @@ class LoginActivity : AppCompatActivity() {
         btnRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 

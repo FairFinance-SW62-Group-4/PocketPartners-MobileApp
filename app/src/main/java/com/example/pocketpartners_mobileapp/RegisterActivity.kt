@@ -15,6 +15,7 @@ import Beans.UsersInformation
 import Interface.PlaceHolder
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.ImageView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +33,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register)
 
         val btnRegister = findViewById<Button>(R.id.btnRegister)
+        val btnLogin = findViewById<Button>(R.id.btnLogin)
         val edtUsername = findViewById<EditText>(R.id.edtUsername)
         val edtPassword = findViewById<EditText>(R.id.edtPassword)
         val edtFirstName = findViewById<EditText>(R.id.edtFirstName)
@@ -39,6 +41,7 @@ class RegisterActivity : AppCompatActivity() {
         val edtPhoneNumber = findViewById<EditText>(R.id.edtPhoneNumber)
         val edtPhoto = findViewById<EditText>(R.id.edtPhoto)
         val edtEmail = findViewById<EditText>(R.id.edtEmail)
+        val backButton = findViewById<ImageView>(R.id.backButton)
 
         sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
 
@@ -50,6 +53,13 @@ class RegisterActivity : AppCompatActivity() {
 
         service = retrofit.create(PlaceHolder::class.java)
         authHelper = AuthHelper(service, sharedPreferences)
+
+        backButton.setOnClickListener {
+            // Crear un Intent para abrir MainMenu
+            val intent = Intent(this, MainMenu::class.java)
+            startActivity(intent)
+            finish() // Opcional: finaliza LoginActivity para evitar regresar con el botón "Atrás"
+        }
 
         // Manejar el registro
         btnRegister.setOnClickListener {
@@ -66,6 +76,12 @@ class RegisterActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Por favor, complete todos los campos", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        btnLogin.setOnClickListener{
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

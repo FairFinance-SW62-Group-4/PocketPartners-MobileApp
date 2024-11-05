@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         // Verificar si el usuario está autenticado
         if (!isUserAuthenticated()) {
             // Si no está autenticado, redirigir a LoginActivity
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, MainMenu::class.java)
             startActivity(intent)
             finish() // Cierra la MainActivity para que el usuario no pueda volver con el botón de atrás
             return
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
     fun logout() {
         sharedPreferences.edit().clear().apply()
 
-        val intent = Intent(this, LoginActivity::class.java)
+        val intent = Intent(this, MainMenu::class.java)
         startActivity(intent)
         finish()
     }
