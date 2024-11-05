@@ -1,0 +1,175 @@
+package com.example.pocketpartners_mobileapp
+
+import Beans.FriendsOfUser
+import Beans.UsersInformation
+import Interface.FriendsPlaceHolder
+import Interface.PlaceHolder
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.pocketpartners_mobileapp.FriendsFragment.Companion
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
+
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
+/**
+ * A simple [Fragment] subclass.
+ * Use the [AddFriendsFragment.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class AddFriendsFragment : Fragment() {
+
+    lateinit var service: PlaceHolder
+    private lateinit var sharedPreferences: SharedPreferences
+    lateinit var authHeader:String
+
+    companion object {
+        private const val USER_ID = "user_id"
+
+        fun newInstance(userId: Int): AddFriendsFragment{
+            val fragment = AddFriendsFragment()
+            val args = Bundle()
+            args.putInt(USER_ID, userId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
+    private var userId = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            userId = it.getInt(com.example.pocketpartners_mobileapp.AddFriendsFragment.USER_ID, 0)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_add_friends, container, false)
+        sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
+
+        val btnSearchUser = view.findViewById<Button>(R.id.btnSearchUserByName)
+        val searchTextEdit = view.findViewById<EditText>(R.id.edit_searchUser)
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        service = retrofit.create(PlaceHolder::class.java)
+
+        btnSearchUser.setOnClickListener{
+            getUsers(view, searchTextEdit.text.toString())
+
+            /*val fragment = FriendsFragment.newInstance(userId)
+            val transaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment_container, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()*/
+        }
+
+        getUsers(view, "")
+
+        return view
+    }
+
+    private fun getUsers(view: View, name: String){
+        authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+        val friends = mutableListOf<Int>()
+        Log.d("AddFriendsFragment", "Auth Header: $authHeader")
+
+        //OBTIENE LA LISTA DE AMIGOS DEL USUARIO
+        service.getFriends(authHeader, userId).enqueue(object : Callback<FriendsOfUser>{
+            override fun onResponse(call: Call<FriendsOfUser>, response: Response<FriendsOfUser>) {
+                val lf = response.body()
+                //Log.d("amigos", lf?.friendIds?.size.toString())
+                if(lf?.friendIds?.size != null){
+                    for(f in lf.friendIds){
+                        friends.add(f)
+                    }
+                }
+
+                //OBTIENE TODOS LOS USUARIOS
+                service.getAllUsersInformation(authHeader).enqueue(object : Callback<List<UsersInformation>>{
+                    override fun onResponse(call: Call<List<UsersInformation>>, response: Response<List<UsersInformation>>) {
+                        val u = response.body()
+                        val listaU = mutableListOf<UsersInformation>()
+
+                        if(u != null){
+                            for (item in u){
+                                //COMPARA SOLO LOS QUE NO SON AMIGOS DEL USUARIO O EL PROPIO USUSARIO
+                                if(item.id !in friends && item.id != userId){
+
+                                    //COMPARA LOS NOMBRES BUSCADOS
+                                    if(compareStrings(name,item.fullName)){
+                                        Log.d("Usuario se puede añadir", item.id.toString())
+                                        listaU.add(
+                                            UsersInformation(item.id, item.fullName, item.phoneNumber,
+                                                item.photo ,item.email, item.userId)
+                                        )
+                                    }
+                                }
+                            }
+
+                            val recycler = view.findViewById<RecyclerView>(R.id.recyclerAddFriends)
+                            recycler.layoutManager = LinearLayoutManager(requireContext())
+                            recycler.adapter = AddFriendsAdapter(listaU, service, userId, authHeader)
+                        }
+                    }
+
+                    override fun onFailure(p0: Call<List<UsersInformation>>, p1: Throwable) {
+                        p1.printStackTrace()
+                    }
+                })
+            }
+
+            override fun onFailure(p0: Call<FriendsOfUser>, p1: Throwable) {
+                p1.printStackTrace()
+            }
+        })
+    }
+
+    private fun compareStrings(searched:String, name:String): Boolean{
+
+        val n = searched.length
+        if(n == 0){
+            return true
+        }
+
+        if(n <= name.length){
+            var w = ""
+            var i = 0
+            while (i < n){
+                w += name[i]
+                i++
+            }
+
+            //Log.d("Comparados", "${w} y ${searched}")
+            if(w.lowercase() == searched.lowercase()){
+                return true
+            }
+        }
+        return false
+    }
+}

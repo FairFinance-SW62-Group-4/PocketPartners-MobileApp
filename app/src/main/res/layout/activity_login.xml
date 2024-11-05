@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:shape="oval"
+        android:src="@drawable/ic_arrow_left"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:contentDescription="Backbtn"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Iniciar Sesión"
+        android:textAlignment="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="100dp"
+        android:textSize="25sp"/>
+
+    <EditText
+        android:id="@+id/edtUsername"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginBottom="25dp"
+        android:hint="Nombre de Usuario"/>
+
+    <EditText
+        android:id="@+id/edtPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Contraseña"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginBottom="40dp"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:textSize="20dp"
+        android:background="@drawable/btn_redondeado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+        android:text="Login"/>
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:textSize="20dp"
+        android:background="@drawable/btn_redondeado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:text="Register"/>
+
+</LinearLayout>

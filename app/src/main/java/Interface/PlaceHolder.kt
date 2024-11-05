@@ -1,30 +1,152 @@
 package Interface
 
+import Beans.AddFriend
+import Beans.AuthenticatedUserResource
+import Beans.Expense
+import Beans.ExpenseResponse
+import Beans.FriendListRequest
 import Beans.FriendsList
+import Beans.FriendsOfUser
+import Beans.GroupJoin
 import Beans.GroupRequest
 import Beans.GroupResponse
 import Beans.Grupo
+import Beans.Payment
+import Beans.SignInRequest
+import Beans.SignUpRequest
+import Beans.UpdatedFriendsList
+import Beans.User
+import Beans.UserInformationRequest
 import Beans.UsersInformation
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface PlaceHolder {
-    @GET("groups")
+    //GROUPS
+    @GET("api/v1/groups")
     fun getListadoGroups(): Call<List<Grupo>>
 
-    @GET("userFriendsList/userId/{userId}")
-    fun getFriendsList(@Path("userId") userId: Int): Call<FriendsList>
+    @POST("api/v1/groups")
+    fun createGroup(
+        @Header("Authorization") authHeader: String,
+        @Body groupRequest: GroupRequest
+    ): Call<GroupResponse>
 
-    // Endpoint para obtener la información de todos los usuarios
-    @GET("usersInformation/userId/{userId}")
-    fun getUserInformation(@Path("userId") userId: Int): Call<UsersInformation>
+    @GET("api/v1/groups/{groupId}")
+    fun getGruposPorGroupId(
+        @Header("Authorization") authHeader: String,
+        @Path("groupId") groupId: Int
+    ): Call<Grupo>
 
-    @POST("groups")
-    fun createGroup(@Body groupRequest: GroupRequest): Call<GroupResponse>
+    @POST("api/v1/groups/{groupId}/members/{userId}")
+    fun addMemberToGroup(
+        @Header("Authorization") authHeader: String,
+        @Path("groupId") groupId: Int,
+        @Path("userId") userId: Int
+    ): Call<GroupJoin>
 
-    @POST("groups/{groupId}/members/{userId}")
-    fun addMemberToGroup(@Path("groupId") groupId: Int, @Path("userId") userId: Int, @Body memberJson: Map<String, Any>): Call<Void>
+    @GET("api/v1/groups/members/{userId}")
+    fun getGruposUnidosPorUserId(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<List<GroupJoin>>
+
+    //USERS
+
+    @GET("api/v1/usersInformation/userId/{userId}")
+    fun getUserInformation(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<UsersInformation>
+
+    @GET("api/v1/usersInformation")
+    fun getAllUsersInformation(
+        @Header("Authorization") authHeader: String,
+    ): Call<List<UsersInformation>>
+
+    @POST("api/v1/usersInformation")
+    fun createUserInformation(
+        @Header("Authorization") authHeader: String,
+        @Body userInformationRequest: UserInformationRequest
+    ): Call<UsersInformation>
+
+    //USERS FRIEND LISTS
+
+    @GET("api/v1/userFriendsList/userId/{userId}")
+    fun getFriends(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<FriendsOfUser>
+    
+    @GET("api/v1/userFriendsList/userId/{userId}")
+    fun getUserFriendsListById(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<FriendsList>
+
+    @POST("api/v1/userFriendsList/addFriend")
+    fun addFriends(
+        @Header("Authorization") authHeader: String,
+        @Body addFriend: AddFriend
+    ): Call<FriendsOfUser>
+
+    @POST("api/v1/userFriendsList/addFriend")
+    fun addUserToFriendsList(
+        @Header("Authorization") authHeader: String
+    ): Call<FriendsList>
+
+    @PUT("api/v1/userFriendsList/userId/{userId}")
+    fun updateFriendList(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int,
+        @Body list:UpdatedFriendsList
+    ): Call<FriendsOfUser>
+    
+    @POST("api/v1/userFriendsList")
+    fun createFriendsList(
+        @Header("Authorization") authHeader: String,
+        @Body friendListRequest: FriendListRequest
+    ): Call<FriendsList>
+    
+    //PAYMENT
+    @GET("api/v1/payments/userId/{userId}")
+    fun getPaymentsByUserId(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<List<Payment>>
+
+    @GET("api/v1/payments")
+    fun getPayments(
+        @Header("Authorization") authHeader: String
+    ): Call<List<Payment>>
+
+    @GET("api/v1/payments/userId/{userId}/status/PENDING")
+    fun getPaymentsByUserIdPending(
+        @Header("Authorization") authHeader: String,
+        @Path("userId") userId: Int
+    ): Call<List<Payment>>
+
+    @GET("api/v1/expenses")
+    fun getAllExpenses(
+        @Header("Authorization") authHeader: String,): Call<List<Expense>>
+
+    @GET("api/v1/expenses/expenseId/{expenseId}")
+    fun getExpensesByExpenseId(
+        @Header("Authorization") authHeader: String,
+        @Path("expenseId") expenseId: Long
+    ): Call<ExpenseResponse>
+
+
+    //AUTHENTICATION
+    @POST("api/v1/authentication/sign-in")
+    fun signIn(@Body signInRequest: SignInRequest): Call<AuthenticatedUserResource>
+
+    @POST("api/v1/authentication/sign-up")
+    fun signUp(@Body signUpRequest: SignUpRequest): Call<User>
+
 }

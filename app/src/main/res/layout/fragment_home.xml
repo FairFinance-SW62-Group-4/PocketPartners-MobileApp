@@ -68,6 +68,7 @@
                         android:textSize="40dp"
                         android:text="$"/>
                     <TextView
+                        android:id="@+id/txtTotalRecibir"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="18dp"
@@ -115,6 +116,7 @@
                         android:textSize="40dp"
                         android:text="$"/>
                     <TextView
+                        android:id="@+id/txtTotalPagar"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginTop="18dp"
@@ -150,154 +152,31 @@
                     android:textSize="22dp"
                     android:layout_marginBottom="5dp"/>
                 <TableLayout
+                    android:id="@+id/tableLayoutResumen"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="visible"
+                    android:stretchColumns="1">
 
                     <TableRow>
                         <TextView
+                            android:text="Expense"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:text="Nombre"
-                            android:textSize="16dp"
-                            android:textStyle="bold" />
+                            android:gravity="center" />
                         <TextView
+                            android:text="Amount"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:text="Monto"
-                            android:textSize="16dp"
-                            android:textStyle="bold" />
+                            android:gravity="center" />
                         <TextView
+                            android:text="Status"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:text="Tipo"
-                            android:textSize="16dp"
-                            android:textStyle="bold" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Futbol" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="10" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Recibido" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Mercado" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="23" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Pagado" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Limpieza" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="13" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Recibido" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Cena" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="12" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Pagado" />
-                    </TableRow>
-
-                    <TableRow>
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Juegos" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="1" />
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:textSize="16dp"
-                            android:text="Recibido" />
+                            android:gravity="center" />
                     </TableRow>
                 </TableLayout>
             </LinearLayout>
