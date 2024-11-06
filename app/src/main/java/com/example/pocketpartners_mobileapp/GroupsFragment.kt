@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pocketpartners_mobileapp.CreateGroupFragment
 import com.example.pocketpartners_mobileapp.GroupAdapter
+import com.example.pocketpartners_mobileapp.GroupDetailsFragment
 import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -130,9 +131,18 @@ class GroupsFragment : Fragment() {
     }
 
     private fun setupRecyclerView(view: View, grupos: List<Grupo>) {
-        if (!isAdded) return  // Evitar la configuración si el fragmento no está adjunto a la actividad
+        if (!isAdded) return
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerGroups)
         recycler.layoutManager = LinearLayoutManager(requireContext())
-        recycler.adapter = GroupAdapter(grupos)
+
+        recycler.adapter = GroupAdapter(grupos) { grupo ->
+            // Abrir el GroupDetailsFragment al hacer clic en un grupo
+            val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+            val groupDetailsFragment = GroupDetailsFragment.newInstance(grupo.id.toLong(), authHeader)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, groupDetailsFragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 }

@@ -56,6 +56,7 @@ interface PlaceHolder {
         @Path("userId") userId: Int
     ): Call<List<GroupJoin>>
 
+
     //USERS
 
     @GET("api/v1/usersInformation/userId/{userId}")
@@ -140,6 +141,12 @@ interface PlaceHolder {
         @Header("Authorization") authHeader: String,
         @Path("expenseId") expenseId: Long
     ): Call<ExpenseResponse>
+
+    @GET("api/v1/expenses/groupId/{groupId}")
+    fun getExpensesByExpenseGroupId(
+        @Header("Authorization") authHeader: String,
+        @Path("groupId") groupId: Long
+    ): Call<List<ExpenseResponse>>
 
 
     //AUTHENTICATION
