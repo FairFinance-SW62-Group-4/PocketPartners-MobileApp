@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 
 class GroupAdapter(private val grupos: List<Grupo>, private val onGroupClick: (Grupo) -> Unit) :
     RecyclerView.Adapter<GroupAdapter.GrupoViewHolder>() {
+    private val colores = listOf(R.color.colorAmarillo, R.color.colorBlanco)
 
     class GrupoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvGroupName: TextView = view.findViewById(R.id.tvGroupName)
@@ -33,6 +34,9 @@ class GroupAdapter(private val grupos: List<Grupo>, private val onGroupClick: (G
             .load(grupo.groupPhoto)
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(holder.ivGroupImage)
+
+        val colorIndex = position % colores.size
+        holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, colores[colorIndex]))
 
         holder.cardView.setOnClickListener {
             onGroupClick(grupo)

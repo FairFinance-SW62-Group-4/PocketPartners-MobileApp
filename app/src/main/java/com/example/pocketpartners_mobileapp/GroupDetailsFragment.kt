@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import Interface.PlaceHolder
 import Beans.ExpenseResponse
+import GroupsFragment
+import android.content.SharedPreferences
+import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +29,7 @@ class GroupDetailsFragment : Fragment() {
     private lateinit var expensesAdapter: ExpenseAdapter
     private lateinit var expensesRecyclerView: RecyclerView
     private lateinit var expensesMessageTextView: TextView
+    private lateinit var sharedPreferences: SharedPreferences
 
     companion object {
         private const val ARG_GROUP_ID = "group_id"
@@ -46,11 +51,14 @@ class GroupDetailsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_group_details, container, false)
 
+        sharedPreferences = requireActivity().getSharedPreferences("user_prefs", AppCompatActivity.MODE_PRIVATE)
+
         // Obtener el groupId y el token de autorización pasados como argumento
         groupId = arguments?.getLong(ARG_GROUP_ID)
         val authToken = arguments?.getString(ARG_AUTH_TOKEN)
 
         val tvGroupName = view.findViewById<TextView>(R.id.tvGroupName)
+        val backBtn = view.findViewById<ImageView>(R.id.backButton)
         val btnMenu = view.findViewById<Button>(R.id.btnMenu)
         val btnAddExpense = view.findViewById<Button>(R.id.btnAddExpense)
         expensesRecyclerView = view.findViewById(R.id.rvExpenses)
@@ -81,6 +89,10 @@ class GroupDetailsFragment : Fragment() {
             // Lógica para añadir gasto o abrir un fragmento de creación de gasto
         }
 
+        backBtn.setOnClickListener(){
+            parentFragmentManager.popBackStack()
+        }
+
         return view
     }
 
@@ -92,8 +104,11 @@ class GroupDetailsFragment : Fragment() {
     }
 
     private fun fetchGroupExpenses(authToken: String, groupId: Long) {
+        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
         val service = getRetrofitInstance().create(PlaceHolder::class.java)
-        val call = service.getExpensesByExpenseGroupId("Bearer $authToken", groupId)
+        Log.d("GroupDetailsFragment", "Auth Header: $authHeader")
+        Log.d("GroupDetailsFragment", "Group ID: $groupId")
+        val call = service.getExpensesByExpenseGroupId(authHeader, groupId)
 
         call.enqueue(object : Callback<List<ExpenseResponse>> {
             override fun onResponse(call: Call<List<ExpenseResponse>>, response: Response<List<ExpenseResponse>>) {
@@ -111,9 +126,11 @@ class GroupDetailsFragment : Fragment() {
                         expensesRecyclerView.visibility = View.VISIBLE
                     }
                 } else {
-                    expensesMessageTextView.text = "Error: ${response.code()}"
-                    expensesMessageTextView.visibility = View.VISIBLE
-                    expensesRecyclerView.visibility = View.GONE
+                    if (response.code() == 400) {
+                        expensesMessageTextView.text = "No se encuentran gastos"
+                        expensesMessageTextView.visibility = View.VISIBLE
+                        expensesRecyclerView.visibility = View.GONE
+                    }
                 }
             }
 
