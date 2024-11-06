@@ -137,7 +137,8 @@ class GroupsFragment : Fragment() {
 
         recycler.adapter = GroupAdapter(grupos) { grupo ->
             // Abrir el GroupDetailsFragment al hacer clic en un grupo
-            val groupDetailsFragment = GroupDetailsFragment.newInstance(grupo.name)
+            val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+            val groupDetailsFragment = GroupDetailsFragment.newInstance(grupo.id.toLong(), authHeader)
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, groupDetailsFragment)
                 .addToBackStack(null)
