@@ -11,10 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class GroupAdapter(private val grupos: List<Grupo>) : RecyclerView.Adapter<GroupAdapter.GrupoViewHolder>() {
-
-    // Definimos los colores de fondo que se van a intercalar
-    private val colores = listOf(R.color.colorAmarillo, R.color.colorBlanco)  // Define tus colores aquí
+class GroupAdapter(private val grupos: List<Grupo>, private val onGroupClick: (Grupo) -> Unit) :
+    RecyclerView.Adapter<GroupAdapter.GrupoViewHolder>() {
 
     class GrupoViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvGroupName: TextView = view.findViewById(R.id.tvGroupName)
@@ -31,17 +29,15 @@ class GroupAdapter(private val grupos: List<Grupo>) : RecyclerView.Adapter<Group
         val grupo = grupos[position]
 
         holder.tvGroupName.text = grupo.name
-
         Glide.with(holder.itemView.context)
             .load(grupo.groupPhoto)
             .placeholder(R.drawable.ic_launcher_foreground)
             .into(holder.ivGroupImage)
 
-        val colorIndex = position % colores.size
-        holder.cardView.setCardBackgroundColor(ContextCompat.getColor(holder.itemView.context, colores[colorIndex]))
+        holder.cardView.setOnClickListener {
+            onGroupClick(grupo)
+        }
     }
 
-    override fun getItemCount(): Int {
-        return grupos.size
-    }
+    override fun getItemCount(): Int = grupos.size
 }

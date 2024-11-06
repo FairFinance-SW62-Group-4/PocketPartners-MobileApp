@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import Beans.Expense
+import Beans.ExpenseResponse
 
 class ExpenseAdapter : RecyclerView.Adapter<ExpensesViewHolder>() {
 
