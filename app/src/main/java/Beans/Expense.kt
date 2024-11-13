@@ -18,3 +18,10 @@ data class ExpenseResponse(
     val createdAt: String,
     val updatedAt: String
 )
+
+data class AddExpense(
+    val name: String,
+    val amount: Double,
+    val userId: Int,
+    val groupId: Long
+)

@@ -1,6 +1,8 @@
 package Interface
 
+import Beans.AddExpense
 import Beans.AddFriend
+import Beans.AddPayment
 import Beans.AuthenticatedUserResource
 import Beans.Expense
 import Beans.ExpenseResponse
@@ -8,10 +10,13 @@ import Beans.FriendListRequest
 import Beans.FriendsList
 import Beans.FriendsOfUser
 import Beans.GroupJoin
+import Beans.GroupOperationPost
+import Beans.GroupOperationResponse
 import Beans.GroupRequest
 import Beans.GroupResponse
 import Beans.Grupo
 import Beans.Payment
+import Beans.PaymentCompleted
 import Beans.SignInRequest
 import Beans.SignUpRequest
 import Beans.UpdatedFriendsList
@@ -57,8 +62,8 @@ interface PlaceHolder {
     ): Call<List<GroupJoin>>
 
 
-    //USERS
 
+    //USERS
     @GET("api/v1/usersInformation/userId/{userId}")
     fun getUserInformation(
         @Header("Authorization") authHeader: String,
@@ -76,8 +81,9 @@ interface PlaceHolder {
         @Body userInformationRequest: UserInformationRequest
     ): Call<UsersInformation>
 
-    //USERS FRIEND LISTS
 
+
+    //USERS FRIEND LISTS
     @GET("api/v1/userFriendsList/userId/{userId}")
     fun getFriends(
         @Header("Authorization") authHeader: String,
@@ -113,7 +119,9 @@ interface PlaceHolder {
         @Header("Authorization") authHeader: String,
         @Body friendListRequest: FriendListRequest
     ): Call<FriendsList>
-    
+
+
+
     //PAYMENT
     @GET("api/v1/payments/userId/{userId}")
     fun getPaymentsByUserId(
@@ -147,6 +155,34 @@ interface PlaceHolder {
         @Header("Authorization") authHeader: String,
         @Path("groupId") groupId: Long
     ): Call<List<ExpenseResponse>>
+
+    @POST("api/v1/payments")
+    fun postPayment(
+        @Header("Authorization") authHeader: String,
+        @Body addPayment: AddPayment
+    ): Call<Payment>
+
+    @POST("api/v1/payments/{paymentId}/completed")
+    fun paymentStatusCompleted(
+        @Header("Authorization") authHeader: String,
+        @Path("paymentId") paymentId: Long
+    ): Call<PaymentCompleted>
+
+    @POST("api/v1/expenses")
+    fun postExpense(
+        @Header("Authorization") authHeader: String,
+        @Body addExpense: AddExpense
+    ): Call<ExpenseResponse>
+
+
+
+    //GROUP OPERATIONS
+    @POST("api/v1/groupOperations")
+    fun postGroupOperation(
+        @Header("Authorization") authHeader: String,
+        @Body groupOperationPost: GroupOperationPost
+    ): Call<GroupOperationResponse>
+
 
 
     //AUTHENTICATION
