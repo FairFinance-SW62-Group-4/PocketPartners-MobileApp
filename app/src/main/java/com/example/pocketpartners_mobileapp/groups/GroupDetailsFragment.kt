@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.groups
 
 import Beans.Expense
 import android.os.Bundle
@@ -13,10 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import Interface.PlaceHolder
 import Beans.ExpenseResponse
-import GroupsFragment
 import android.content.SharedPreferences
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pocketpartners_mobileapp.payments.ExpenseAdapter
+import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -56,6 +58,7 @@ class GroupDetailsFragment : Fragment() {
         // Obtener el groupId y el token de autorización pasados como argumento
         groupId = arguments?.getLong(ARG_GROUP_ID)
         val authToken = arguments?.getString(ARG_AUTH_TOKEN)
+        val userId = sharedPreferences.getLong("user_id", -1L).toInt()
 
         val tvGroupName = view.findViewById<TextView>(R.id.tvGroupName)
         val backBtn = view.findViewById<ImageView>(R.id.backButton)
@@ -86,7 +89,19 @@ class GroupDetailsFragment : Fragment() {
 
         // Acción al presionar el botón de añadir gastos
         btnAddExpense.setOnClickListener {
-            // Lógica para añadir gasto o abrir un fragmento de creación de gasto
+            // Verifica que los IDs no sean nulos o valores predeterminados
+            if (groupId != null && userId != -1) {
+                // Crea instancia de AddExpenseFragment con los argumentos necesarios
+                val addExpenseFragment = AddExpenseFragment.newInstance(groupId!!, userId)
+
+                // Navegar al AddExpenseFragment
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, addExpenseFragment)  // Reemplaza con el contenedor de tu fragmento
+                    .addToBackStack(null)  // Permite regresar al fragmento anterior
+                    .commit()
+            } else {
+                Toast.makeText(requireContext(), "Error: No se pudo obtener el ID del grupo o del usuario", Toast.LENGTH_SHORT).show()
+            }
         }
 
         backBtn.setOnClickListener(){

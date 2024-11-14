@@ -1,11 +1,10 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.payments
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import Beans.Expense
-import Beans.ExpenseResponse
+import com.example.pocketpartners_mobileapp.R
 
 class ExpenseAdapter : RecyclerView.Adapter<ExpensesViewHolder>() {
 

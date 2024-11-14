@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.login
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,13 +7,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import Beans.SignInRequest
-import Beans.AuthenticatedUserResource
 import Interface.PlaceHolder
 import android.widget.ImageView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.pocketpartners_mobileapp.MainMenu
+import com.example.pocketpartners_mobileapp.R
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

@@ -32,3 +32,16 @@ data class GroupRequest(
     val groupPhoto: String,
     val currency: List<String>
 )
+
+data class GroupOperationPost(
+    val groupId: Int,
+    val expenseId: Int,
+    val paymentId: Int
+)
+
+data class GroupOperationResponse(
+    val id: Int,
+    val groupId: Int,
+    val expenseId: Int,
+    val paymentId: Int
+)

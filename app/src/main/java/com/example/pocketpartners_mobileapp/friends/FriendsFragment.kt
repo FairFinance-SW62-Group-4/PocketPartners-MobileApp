@@ -1,6 +1,5 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.friends
 
-import Beans.FriendsList
 import Beans.FriendsOfUser
 import Beans.UsersInformation
 import Interface.PlaceHolder
@@ -15,12 +14,12 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 class FriendsFragment : Fragment() {
 

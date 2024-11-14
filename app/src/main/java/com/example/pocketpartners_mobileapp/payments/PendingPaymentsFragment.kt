@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.payments
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -14,6 +14,7 @@ import Interface.PlaceHolder
 import Beans.Payment
 import Beans.Expense
 import android.util.Log
+import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

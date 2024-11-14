@@ -7,6 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.fragment.app.Fragment
+import com.example.pocketpartners_mobileapp.friends.FriendsFragment
+import com.example.pocketpartners_mobileapp.groups.GroupsFragment
+import com.example.pocketpartners_mobileapp.home.HomeFragment
+import com.example.pocketpartners_mobileapp.notifications.NotificationsFragment
+import com.example.pocketpartners_mobileapp.payments.PendingPaymentsFragment
 
 class MainActivity : AppCompatActivity() {
 

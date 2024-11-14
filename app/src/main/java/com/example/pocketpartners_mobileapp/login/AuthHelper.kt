@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.login
 
 import android.content.Context
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.widget.Toast
 import Beans.SignInRequest
 import Beans.AuthenticatedUserResource
 import Interface.PlaceHolder
+import com.example.pocketpartners_mobileapp.MainActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
