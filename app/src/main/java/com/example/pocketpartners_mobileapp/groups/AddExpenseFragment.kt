@@ -65,19 +65,23 @@ class AddExpenseFragment : Fragment() {
         expenseAmountEditText = view.findViewById(R.id.etExpenseAmount)
         paidByUserCheckbox = view.findViewById(R.id.cbPaidByUser)
         createExpenseButton = view.findViewById(R.id.btnCreateExpense)
+        val backBtn = view.findViewById<ImageView>(R.id.backButton)
 
         // Configuración del RecyclerView con el nuevo adaptador
         groupMembersRecyclerView = view.findViewById(R.id.rvGroupMembers)
         groupMembersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        groupMembersAdapter = MemberSelectionAdapter(emptyList()) // Se inicializa vacío temporalmente
+        groupMembersAdapter = MemberSelectionAdapter(emptyList())
         groupMembersRecyclerView.adapter = groupMembersAdapter
 
         fetchGroupMembers()
 
         createExpenseButton.setOnClickListener {
             createExpense()
+            parentFragmentManager.popBackStack()
         }
-
+        backBtn.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
         return view
     }
 
