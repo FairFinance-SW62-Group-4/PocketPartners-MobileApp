@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.login
 
 import Beans.FriendListRequest
 import Beans.FriendsList
@@ -16,6 +16,9 @@ import Interface.PlaceHolder
 import android.content.SharedPreferences
 import android.util.Log
 import android.widget.ImageView
+import com.example.pocketpartners_mobileapp.MainActivity
+import com.example.pocketpartners_mobileapp.MainMenu
+import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.groups
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -20,6 +20,8 @@ import Beans.GroupOperationResponse
 import Beans.Payment
 import Beans.UsersInformation
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pocketpartners_mobileapp.R
+import com.example.pocketpartners_mobileapp.friends.MemberSelectionAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

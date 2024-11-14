@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.groups
 
 import Beans.Expense
 import android.os.Bundle
@@ -13,11 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import Interface.PlaceHolder
 import Beans.ExpenseResponse
-import GroupsFragment
 import android.content.SharedPreferences
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pocketpartners_mobileapp.payments.ExpenseAdapter
+import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

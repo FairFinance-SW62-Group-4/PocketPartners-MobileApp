@@ -1,8 +1,7 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.home
 
 import Interface.PlaceHolder
 import Beans.Payment
-import Beans.Expense
 import Beans.ExpenseResponse
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.example.pocketpartners_mobileapp.MainActivity
+import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

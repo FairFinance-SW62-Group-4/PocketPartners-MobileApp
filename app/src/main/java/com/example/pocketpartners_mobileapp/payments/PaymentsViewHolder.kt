@@ -1,9 +1,10 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.payments
 
 import Beans.Payment
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pocketpartners_mobileapp.R
 
 class PaymentViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val descriptionTextView: TextView = itemView.findViewById(R.id.payment_description)

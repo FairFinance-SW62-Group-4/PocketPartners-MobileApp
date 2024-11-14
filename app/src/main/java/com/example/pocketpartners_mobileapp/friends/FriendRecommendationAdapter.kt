@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.friends
 
 import Beans.UsersInformation
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pocketpartners_mobileapp.R
 
 class FriendRecommendationAdapter(private val amigos: List<UsersInformation>, private val onAgregarClick: (UsersInformation) -> Unit) :
     RecyclerView.Adapter<FriendRecommendationAdapter.AmigoViewHolder>() {

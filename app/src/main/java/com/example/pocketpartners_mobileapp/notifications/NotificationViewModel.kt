@@ -1,3 +1,5 @@
+package com.example.pocketpartners_mobileapp.notifications
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

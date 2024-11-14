@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.groups
 
 import Beans.Grupo
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.pocketpartners_mobileapp.R
 
 class GroupAdapter(private val grupos: List<Grupo>, private val onGroupClick: (Grupo) -> Unit) :
     RecyclerView.Adapter<GroupAdapter.GrupoViewHolder>() {

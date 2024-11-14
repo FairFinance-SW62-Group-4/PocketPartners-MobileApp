@@ -1,8 +1,7 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.friends
 
 import Beans.FriendsOfUser
 import Beans.UsersInformation
-import Interface.FriendsPlaceHolder
 import Interface.PlaceHolder
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -16,13 +15,12 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pocketpartners_mobileapp.FriendsFragment.Companion
+import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,7 +41,7 @@ class AddFriendsFragment : Fragment() {
     companion object {
         private const val USER_ID = "user_id"
 
-        fun newInstance(userId: Int): AddFriendsFragment{
+        fun newInstance(userId: Int): AddFriendsFragment {
             val fragment = AddFriendsFragment()
             val args = Bundle()
             args.putInt(USER_ID, userId)
@@ -57,7 +55,7 @@ class AddFriendsFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            userId = it.getInt(com.example.pocketpartners_mobileapp.AddFriendsFragment.USER_ID, 0)
+            userId = it.getInt(USER_ID, 0)
         }
     }
 

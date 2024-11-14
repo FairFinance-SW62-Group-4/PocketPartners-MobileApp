@@ -1,4 +1,4 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.groups
 
 import Beans.FriendsList
 import Beans.GroupJoin
@@ -13,7 +13,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import Beans.UsersInformation
-import GroupsFragment
 import Interface.PlaceHolder
 import android.content.SharedPreferences
 import android.os.Build
@@ -22,13 +21,13 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.pocketpartners_mobileapp.R
+import com.example.pocketpartners_mobileapp.friends.FriendRecommendationAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class AddParticipantFragment : Fragment() {
 

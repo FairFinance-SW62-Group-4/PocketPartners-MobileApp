@@ -1,3 +1,5 @@
+package com.example.pocketpartners_mobileapp.groups
+
 import Beans.GroupJoin
 import Beans.Grupo
 import Interface.PlaceHolder
@@ -9,14 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pocketpartners_mobileapp.CreateGroupFragment
-import com.example.pocketpartners_mobileapp.GroupAdapter
-import com.example.pocketpartners_mobileapp.GroupDetailsFragment
 import com.example.pocketpartners_mobileapp.R
 import retrofit2.Call
 import retrofit2.Callback
@@ -83,14 +80,14 @@ class GroupsFragment : Fragment() {
 
     private fun getJoinedGroups(view: View) {
         val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
-        Log.d("GroupsFragment", "Auth Header: $authHeader")
+        Log.d("com.example.pocketpartners_mobileapp.groups.GroupsFragment", "Auth Header: $authHeader")
 
         service.getGruposUnidosPorUserId(authHeader, userId).enqueue(object : Callback<List<GroupJoin>> {
             override fun onResponse(call: Call<List<GroupJoin>>, response: Response<List<GroupJoin>>) {
                 val groupJoins = response.body()
                 val listaGrupos = mutableListOf<Grupo>()
 
-                Log.d("GroupsFragment", "Response: $groupJoins")
+                Log.d("com.example.pocketpartners_mobileapp.groups.GroupsFragment", "Response: $groupJoins")
 
                 // Verifica que se hayan recibido datos
                 if (groupJoins != null) {
@@ -119,13 +116,13 @@ class GroupsFragment : Fragment() {
                     }
                 } else {
                     val errorMessage = "Código de error: ${response.code()}"
-                    Log.e("GroupsFragment", "No group joins found: $errorMessage")
+                    Log.e("com.example.pocketpartners_mobileapp.groups.GroupsFragment", "No group joins found: $errorMessage")
                 }
             }
 
             override fun onFailure(call: Call<List<GroupJoin>>, t: Throwable) {
                 t.printStackTrace()
-                Log.e("GroupsFragment", "Error: ${t.message}")
+                Log.e("com.example.pocketpartners_mobileapp.groups.GroupsFragment", "Error: ${t.message}")
             }
         })
     }

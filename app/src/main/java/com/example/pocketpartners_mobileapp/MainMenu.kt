@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import android.widget.Button // Asegúrate de importar Button
+import com.example.pocketpartners_mobileapp.login.LoginActivity
+import com.example.pocketpartners_mobileapp.login.RegisterActivity
 
 class MainMenu : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

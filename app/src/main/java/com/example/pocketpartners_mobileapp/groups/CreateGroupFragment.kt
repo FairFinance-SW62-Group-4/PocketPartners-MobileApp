@@ -1,6 +1,5 @@
-package com.example.pocketpartners_mobileapp
+package com.example.pocketpartners_mobileapp.groups
 
-import GroupsFragment
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
+import com.example.pocketpartners_mobileapp.R
 
 class CreateGroupFragment : Fragment() {
 
