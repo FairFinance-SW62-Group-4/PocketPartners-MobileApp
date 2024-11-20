@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import Interface.PlaceHolder
 import Beans.ExpenseResponse
+import Beans.Grupo
 import android.content.SharedPreferences
 import android.widget.ImageView
 import android.widget.Toast
@@ -62,7 +63,7 @@ class GroupDetailsFragment : Fragment() {
 
         val tvGroupName = view.findViewById<TextView>(R.id.tvGroupName)
         val backBtn = view.findViewById<ImageView>(R.id.backButton)
-        val btnMenu = view.findViewById<Button>(R.id.btnMenu)
+        //val btnMenu = view.findViewById<Button>(R.id.btnMenu)
         val btnAddExpense = view.findViewById<Button>(R.id.btnAddExpense)
         expensesRecyclerView = view.findViewById(R.id.rvExpenses)
         expensesMessageTextView = view.findViewById(R.id.message_text_view)
@@ -76,15 +77,16 @@ class GroupDetailsFragment : Fragment() {
         authToken?.let { token ->
             groupId?.let { id ->
                 fetchGroupExpenses(token, id)
+                fetchGroupName(token, id, tvGroupName) // Llamar a la función para obtener el nombre del grupo
+
             }
         } ?: run {
             expensesMessageTextView.text = "Error: Token de autorización o ID de grupo faltante"
             expensesMessageTextView.visibility = View.VISIBLE
         }
 
-        // Acción al presionar el botón de menú
-        btnMenu.setOnClickListener {
-            // Navegar a otro fragment o actividad si es necesario
+        backBtn.setOnClickListener(){
+            parentFragmentManager.popBackStack()
         }
 
         // Acción al presionar el botón de añadir gastos
@@ -104,9 +106,6 @@ class GroupDetailsFragment : Fragment() {
             }
         }
 
-        backBtn.setOnClickListener(){
-            parentFragmentManager.popBackStack()
-        }
 
         return view
     }
@@ -116,6 +115,26 @@ class GroupDetailsFragment : Fragment() {
             .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+    private fun fetchGroupName(authToken: String, groupId: Long, tvGroupName: TextView) {
+        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+        val service = getRetrofitInstance().create(PlaceHolder::class.java)
+        val call = service.getGruposPorGroupId(authHeader, groupId.toInt())
+
+        call.enqueue(object : Callback<Grupo> {
+            override fun onResponse(call: Call<Grupo>, response: Response<Grupo>) {
+                if (response.isSuccessful) {
+                    val groupName = response.body()?.name
+                    tvGroupName.text = groupName ?: "Nombre del grupo no disponible"
+                } else {
+                    tvGroupName.text = "Error al obtener el nombre del grupo"
+                }
+            }
+
+            override fun onFailure(call: Call<Grupo>, t: Throwable) {
+                tvGroupName.text = "Error de conexión"
+            }
+        })
     }
 
     private fun fetchGroupExpenses(authToken: String, groupId: Long) {

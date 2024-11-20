@@ -21,7 +21,6 @@
             android:layout_height="60dp"
             android:scaleType="centerCrop"
             android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:shape="oval"
             android:src="@drawable/ic_arrow_left"
             android:layout_marginStart="16dp"
             android:layout_marginTop="46dp"
@@ -50,7 +49,6 @@
             android:backgroundTint="#F4F7FA"
             android:layout_gravity="center">
 
-            <!-- Texto de recomendados -->
             <TextView
                 android:id="@+id/tv_recomendados"
                 android:layout_width="wrap_content"
@@ -60,16 +58,21 @@
                 android:textColor="@android:color/black"
                 android:layout_gravity="center"/>
 
-            <!-- Lista de participantes -->
-            <!-- Puedes repetir este bloque para cada participante -->
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvRecomendados"
+            <!-- Contenedor con desplazamiento y altura máxima -->
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="24dp"
-                android:layout_gravity="center" />
+                android:maxHeight="300dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvRecomendados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+
+            </ScrollView>
 
         </LinearLayout>
 
@@ -79,15 +82,12 @@
             android:backgroundTint="@color/colorAmarillo"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
-            android:drawableRight="@drawable/ic_link"
             android:layout_marginLeft="120dp"
             android:layout_marginRight="120dp"
             android:layout_marginTop="20dp"
             android:text="Copiar"
             android:textSize="15sp"
-            android:textColor="@color/black"/>
-
+            android:textColor="@color/black" />
 
     </LinearLayout>
 
@@ -109,7 +109,5 @@
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

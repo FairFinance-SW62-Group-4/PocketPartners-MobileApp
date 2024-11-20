@@ -1,5 +1,7 @@
 package Beans
 
+import com.google.gson.annotations.SerializedName
+
 data class User(
     val id: Int,
     val username: String,
@@ -17,7 +19,7 @@ data class UsersInformation(
 
 data class FriendsList(
     val userId: Int,
-    val friendsIds: List<Int>
+    @SerializedName("friendIds") val friendsIds: List<Int>
 )
 
 data class AuthenticatedUserResource(

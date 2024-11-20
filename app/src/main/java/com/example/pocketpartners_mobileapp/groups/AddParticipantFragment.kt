@@ -233,46 +233,34 @@ class AddParticipantFragment : Fragment() {
     }
 
     private fun obtenerAmigosConInformacionCompleta(userId: Int) {
+        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
         val retrofit = Retrofit.Builder()
             .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
         val placeHolder = retrofit.create(PlaceHolder::class.java)
 
-        val authHeader = sharedPreferences.getString("auth_token", null) ?: return
-
-        // 1. Obtener la lista de amigos de un usuario
         placeHolder.getUserFriendsListById(authHeader, userId).enqueue(object : Callback<FriendsList> {
             override fun onResponse(call: Call<FriendsList>, response: Response<FriendsList>) {
                 if (response.isSuccessful) {
                     val friendsList = response.body()?.friendsIds ?: emptyList()
-                    // Realizar las llamadas individuales para obtener la información de cada amigo
-                    for (friendId in friendsList) {
+                    friendsList.forEach { friendId ->
                         placeHolder.getUserInformation(authHeader, friendId).enqueue(object : Callback<UsersInformation> {
                             override fun onResponse(call: Call<UsersInformation>, response: Response<UsersInformation>) {
-                                if (response.isSuccessful) {
-                                    response.body()?.let { amigo ->
-                                        amigosConInfo.add(amigo)
+                                response.body()?.let { amigo ->
+                                    amigosConInfo.add(amigo)
 
-                                        // Solo actualiza el RecyclerView cuando todos los amigos han sido cargados
-                                        if (amigosConInfo.size == friendsList.size) {
-                                            // Mostrar solo 4 amigos aleatorios
-                                            amigosConInfo.shuffle()
-                                            val amigosSeleccionados = amigosConInfo.take(4)
-
-                                            // Configurar el adaptador
-                                            amigoAdapter = FriendRecommendationAdapter(amigosSeleccionados) { amigo ->
-                                                agregarAmigo(amigo)
-                                            }
-                                            recyclerView.adapter = amigoAdapter
-                                        }
+                                    // Inicializar el adaptador con el listener del botón de agregar
+                                    amigoAdapter = FriendRecommendationAdapter(amigosConInfo) { amigo ->
+                                        agregarAmigoAlGrupo(amigo)
                                     }
+                                    recyclerView.adapter = amigoAdapter
+                                    amigoAdapter.notifyDataSetChanged()
                                 }
                             }
 
                             override fun onFailure(call: Call<UsersInformation>, t: Throwable) {
-                                // Manejar error al obtener información del amigo
+                                Toast.makeText(requireContext(), "Error al cargar detalles de amigo", Toast.LENGTH_SHORT).show()
                             }
                         })
                     }
@@ -280,17 +268,46 @@ class AddParticipantFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<FriendsList>, t: Throwable) {
-                // Manejar error al obtener la lista de amigos
+                Log.e("Error", "Error al obtener la lista de amigos: ${t.message}")
             }
         })
     }
 
-    private fun agregarAmigo(amigo: UsersInformation) {
-        // Lógica para agregar el amigo (puedes implementar lo que necesites aquí)
+    // Función para agregar un amigo al grupo
+    private fun agregarAmigoAlGrupo(amigo: UsersInformation) {
+        val authHeader = "Bearer ${sharedPreferences.getString("auth_token", null)}"
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://pocket-partners-backend-production.up.railway.app/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val placeHolder = retrofit.create(PlaceHolder::class.java)
+
+        // Llamada para agregar al amigo seleccionado al grupo
+        placeHolder.addMemberToGroup(authHeader, groupId, amigo.userId).enqueue(object : Callback<GroupJoin> {
+            override fun onResponse(call: Call<GroupJoin>, response: Response<GroupJoin>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "${amigo.fullName} agregado al grupo.", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Manejar errores de la respuesta
+                    when (response.code()) {
+                        400 -> Toast.makeText(requireContext(), "Solicitud inválida.", Toast.LENGTH_SHORT).show()
+                        404 -> Toast.makeText(requireContext(), "Grupo o usuario no encontrado.", Toast.LENGTH_SHORT).show()
+                        500 -> Toast.makeText(requireContext(), "Error interno del servidor.", Toast.LENGTH_SHORT).show()
+                        else -> Toast.makeText(requireContext(), "Error desconocido: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<GroupJoin>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
+
     private fun regresarAGroupsFragment() {
-        parentFragmentManager.popBackStack()// Regresar al fragmento anterior
+        parentFragmentManager.popBackStack()
         parentFragmentManager.popBackStack()
     }
 }
